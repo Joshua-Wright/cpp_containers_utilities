@@ -60,7 +60,7 @@ namespace containers {
             lhs._capacity = 0;
         }
 
-        dynamic_array &operator=(dynamic_array &&lhs) {
+        dynamic_array<T> &operator=(dynamic_array<T> &&lhs) {
             if (&lhs == this) {
                 /*we are being moved to ourself*/
                 return *this;
@@ -142,30 +142,57 @@ namespace containers {
             return *this;
         };
 
+        template<typename F>
+        dynamic_array<T> &operator%=(const F &lhs) {
+            std::transform(begin(), end(), begin(), [&lhs](const T &n) { return n % lhs; });
+            return *this;
+        };
+
         template<typename U>
         dynamic_array<T> &operator*=(const dynamic_array<U> &lhs) {
+            if (_size != lhs.size()) {
+                throw std::invalid_argument("vector dimensions must match!");
+            }
             std::transform(begin(), end(), lhs.begin(), begin(), [](const T &a, const U &b) { return a * b; });
             return *this;
         };
 
         template<typename U>
         dynamic_array<T> &operator/=(const dynamic_array<U> &lhs) {
+            if (_size != lhs.size()) {
+                throw std::invalid_argument("vector dimensions must match!");
+            }
             std::transform(begin(), end(), lhs.begin(), begin(), [](const T &a, const U &b) { return a / b; });
             return *this;
         };
 
         template<typename U>
         dynamic_array<T> &operator+=(const dynamic_array<U> &lhs) {
+            if (_size != lhs.size()) {
+                throw std::invalid_argument("vector dimensions must match!");
+            }
             std::transform(begin(), end(), lhs.begin(), begin(), [](const T &a, const U &b) { return a + b; });
             return *this;
         };
+
         template<typename U>
         dynamic_array<T> &operator-=(const dynamic_array<U> &lhs) {
+            if (_size != lhs.size()) {
+                throw std::invalid_argument("vector dimensions must match!");
+            }
             std::transform(begin(), end(), lhs.begin(), begin(), [](const T &a, const U &b) { return a - b; });
             return *this;
         };
 
-        /*TODO: modulo operator*/
+        template<typename U>
+        dynamic_array<T> &operator%=(const dynamic_array<U> &lhs) {
+            if (_size != lhs.size()) {
+                throw std::invalid_argument("vector dimensions must match!");
+            }
+            std::transform(begin(), end(), lhs.begin(), begin(), [](const T &a, const U &b) { return a % b; });
+            return *this;
+        };
+
 
         template<typename U>
         bool operator==(const dynamic_array<U> &lhs) { return std::equal(begin(), end(), lhs.begin(), lhs.end()); };
