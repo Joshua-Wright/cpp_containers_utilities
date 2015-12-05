@@ -120,27 +120,52 @@ namespace containers {
 
         template<typename F>
         dynamic_array<T> &operator*=(const F &lhs) {
-            std::transform(begin(), end(), begin(), [&lhs](T &n) { return n * lhs; });
+            std::transform(begin(), end(), begin(), [&lhs](const T &n) { return n * lhs; });
             return *this;
         };
 
         template<typename F>
         dynamic_array<T> &operator/=(const F &lhs) {
-            std::transform(begin(), end(), begin(), [&lhs](T &n) { return n / lhs; });
+            std::transform(begin(), end(), begin(), [&lhs](const T &n) { return n / lhs; });
             return *this;
         };
 
         template<typename F>
         dynamic_array<T> &operator+=(const F &lhs) {
-            std::transform(begin(), end(), begin(), [&lhs](T &n) { return n + lhs; });
+            std::transform(begin(), end(), begin(), [&lhs](const T &n) { return n + lhs; });
             return *this;
         };
 
         template<typename F>
         dynamic_array<T> &operator-=(const F &lhs) {
-            std::transform(begin(), end(), begin(), [&lhs](T &n) { return n - lhs; });
+            std::transform(begin(), end(), begin(), [&lhs](const T &n) { return n - lhs; });
             return *this;
         };
+
+        template<typename U>
+        dynamic_array<T> &operator*=(const dynamic_array<U> &lhs) {
+            std::transform(begin(), end(), lhs.begin(), begin(), [](const T &a, const U &b) { return a * b; });
+            return *this;
+        };
+
+        template<typename U>
+        dynamic_array<T> &operator/=(const dynamic_array<U> &lhs) {
+            std::transform(begin(), end(), lhs.begin(), begin(), [](const T &a, const U &b) { return a / b; });
+            return *this;
+        };
+
+        template<typename U>
+        dynamic_array<T> &operator+=(const dynamic_array<U> &lhs) {
+            std::transform(begin(), end(), lhs.begin(), begin(), [](const T &a, const U &b) { return a + b; });
+            return *this;
+        };
+        template<typename U>
+        dynamic_array<T> &operator-=(const dynamic_array<U> &lhs) {
+            std::transform(begin(), end(), lhs.begin(), begin(), [](const T &a, const U &b) { return a - b; });
+            return *this;
+        };
+
+        /*TODO: modulo operator*/
 
         template<typename U>
         bool operator==(const dynamic_array<U> &lhs) { return std::equal(begin(), end(), lhs.begin(), lhs.end()); };

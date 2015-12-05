@@ -42,7 +42,7 @@ int main(int argc, char const *argv[]) {
         assert(test_array[2] == 3);
     }
     {
-        /*test array operations*/
+        /*test array element-wise operations*/
         dynamic_array<long> test_array_1(5, 0);
         dynamic_array<long> test_array_2(5, 0);
         dynamic_array<long> test_array_3(5, 0);
@@ -67,13 +67,39 @@ int main(int argc, char const *argv[]) {
         }
     }
     {
+        /*test array-array operations*/
+        dynamic_array<long> test_array_0(5, 7);
+        dynamic_array<double> test_array_1(5, 0);
+        dynamic_array<char> test_array_2(5, 0);
+        dynamic_array<unsigned> test_array_3(5, 0);
+        dynamic_array<unsigned long> test_array_4(5, 0);
+        for (int i = 0; i < 5; i++) {
+            test_array_1[i] = i;
+            test_array_2[i] = i;
+            test_array_3[i] = i;
+            test_array_4[i] = i;
+        }
+
+        test_array_1 *= test_array_0;
+        test_array_2 /= test_array_0;
+        test_array_3 += test_array_0;
+        test_array_4 -= test_array_0;
+
+        for (int i = 0; i < 5; i++) {
+            assert(test_array_1[i] == i * test_array_0[i]);
+            assert(test_array_2[i] == i / test_array_0[i]);
+            assert(test_array_3[i] == i + test_array_0[i]);
+            assert(test_array_4[i] == i - test_array_0[i]);
+        }
+    }
+    {
         /*various assignments and constructions*/
         dynamic_array<int> test_array_1(20, 1234);
         dynamic_array<int> test_array_2 = test_array_1;
         dynamic_array<int> test_array_3(test_array_1);
         dynamic_array<int> test_array_4;
         test_array_4 = test_array_1;
-        for (int i=0; i<20; i++) {
+        for (int i = 0; i < 20; i++) {
             assert(test_array_1[i] == 1234);
             assert(test_array_2[i] == 1234);
             assert(test_array_3[i] == 1234);
