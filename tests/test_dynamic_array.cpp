@@ -81,4 +81,21 @@ int main(int argc, char const *argv[]) {
         }
 
     }
+    {
+        /*test equality*/
+        dynamic_array<int> test_array_1(20, 1234);
+        dynamic_array<int> test_array_2 = test_array_1;
+        assert(test_array_1 == test_array_2);
+        test_array_1[3] = 888;
+        assert(test_array_1 != test_array_2);
+    }
+    {
+        /*test resize*/
+        dynamic_array<int> test_array_1(10, 1234);
+        test_array_1.resize(20);
+        test_array_1[15] = 999;
+        assert(test_array_1[5] = 1234);
+        assert(test_array_1[15] = 999);
+    }
+
 }

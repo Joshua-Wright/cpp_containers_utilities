@@ -3,3 +3,6 @@
 //
 
 #include "dynamic_array.h"
+
+/*specializations go here
+ * (ther earen't any yet)*/

@@ -76,8 +76,6 @@ namespace containers {
 
         }
 
-        /*TODO: move assignment operator*/
-
         ~dynamic_array() { delete[] _data; }
 
         const size_t size() const { return _size; };
@@ -112,7 +110,8 @@ namespace containers {
 
         void append(const T element) {
             if (_size == _capacity) {
-                grow(_size + 1);
+                /*geomertric progression*/
+                grow(_size * 2);
             }
             /*this is safe because there is extra padding space after _size*/
             _data[_size] = element;
@@ -143,7 +142,20 @@ namespace containers {
             return *this;
         };
 
-        /*TODO: operator==*/
+        template<typename U>
+        bool operator==(const dynamic_array<U> &lhs) { return std::equal(begin(), end(), lhs.begin(), lhs.end()); };
+
+        template<typename U>
+        bool operator!=(const dynamic_array<U> &lhs) { return !std::equal(begin(), end(), lhs.begin(), lhs.end()); };
+
+        void resize(const size_t new_size) {
+            if (new_size < _size) {
+                _size = new_size;
+            } else if (new_size > _capacity) {
+                grow(new_size);
+                _size = new_size;
+            }
+        };
 
     };
 
