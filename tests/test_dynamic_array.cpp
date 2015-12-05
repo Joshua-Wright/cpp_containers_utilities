@@ -66,4 +66,19 @@ int main(int argc, char const *argv[]) {
             assert(test_array_4[i] == i - 4);
         }
     }
+    {
+        /*various assignments and constructions*/
+        dynamic_array<int> test_array_1(20, 1234);
+        dynamic_array<int> test_array_2 = test_array_1;
+        dynamic_array<int> test_array_3(test_array_1);
+        dynamic_array<int> test_array_4;
+        test_array_4 = test_array_1;
+        for (int i=0; i<20; i++) {
+            assert(test_array_1[i] == 1234);
+            assert(test_array_2[i] == 1234);
+            assert(test_array_3[i] == 1234);
+            assert(test_array_4[i] == 1234);
+        }
+
+    }
 }

@@ -31,10 +31,52 @@ namespace containers {
 
     public:
 
-        dynamic_array(size_t size = 0, T initial_value = T()) : _capacity(size), _size(size),
-                                                                _data(new T[_capacity]) {
+        dynamic_array(const size_t size = 0, const T initial_value = T()) : _capacity(size), _size(size),
+                                                                            _data(new T[_capacity]) {
             std::fill_n(_data, _capacity, initial_value);
         }
+
+        dynamic_array(const dynamic_array<T> &lhs) : _size(lhs._size), _capacity(lhs._size), _data(new T[_capacity]) {
+            std::copy_n(lhs._data, _size, _data);
+
+        };
+
+        dynamic_array &operator=(const dynamic_array<T> &lhs) {
+            if (&lhs == this) {
+                /*we are being assigned to ourself*/
+                return *this;
+            }
+            delete[] _data;
+            _size = lhs._size;
+            _capacity = lhs._size;
+            _data = new T[_capacity];
+            std::copy_n(lhs._data, _size, _data);
+            return *this;
+        }
+
+        dynamic_array(dynamic_array<T> &&lhs) : _size(lhs._size), _capacity(lhs._size), _data(lhs._data) {
+            lhs._data = nullptr;
+            lhs._size = 0;
+            lhs._capacity = 0;
+        }
+
+        dynamic_array &operator=(dynamic_array &&lhs) {
+            if (&lhs == this) {
+                /*we are being moved to ourself*/
+                return *this;
+            }
+            delete[] _data;
+            _size = lhs._size;
+            _capacity = lhs._size;
+            _data = lhs._data;
+            lhs._data = nullptr;
+            lhs._size = 0;
+            lhs._capacity = 0;
+            return *this;
+
+        }
+
+        /*TODO: move assignment operator*/
 
         ~dynamic_array() { delete[] _data; }
 
@@ -54,21 +96,21 @@ namespace containers {
 
         T *data() { return _data; };
 
-        T &operator[](size_t idx) {
+        T &operator[](const size_t idx) {
             if (idx < 0 || idx >= _size) {
                 throw std::out_of_range("Out of range");
             }
             return _data[idx];
         };
 
-        const T &operator[](size_t idx) const {
+        const T &operator[](const size_t idx) const {
             if (idx < 0 || idx >= _size) {
                 throw std::out_of_range("Out of range");
             }
             return _data[idx];
         };
 
-        void append(T element) {
+        void append(const T element) {
             if (_size == _capacity) {
                 grow(_size + 1);
             }
@@ -101,9 +143,7 @@ namespace containers {
             return *this;
         };
 
-        /*TODO: copy constructor*/
-        /*TODO: move constructor*/
-        /*TODO: copy-assignment constructor*/
+        /*TODO: operator==*/
 
     };
 
