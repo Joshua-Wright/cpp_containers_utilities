@@ -30,33 +30,6 @@ namespace containers {
         };
     };
 
-
-    template<class F>
-    class thread_pool {
-
-        F function;
-        std::atomic_ullong current_index;
-
-        std::list<std::thread> threads;
-
-        int n_threads;
-
-    public:
-        thread_pool(F function, int n_threads) : function(function), current_index(0),
-                                                 n_threads(n_threads) { };
-
-        void execute() {
-            for (int i = 0; i < n_threads; i++) {
-                threads.emplace_back(function, std::ref(current_index));
-            }
-            for (auto &t : threads) {
-                t.join();
-            }
-        }
-
-    };
-
-
     template<class F>
     void thread_pool_func(F function, int n_threads) {
         std::atomic_ullong current_index(0);

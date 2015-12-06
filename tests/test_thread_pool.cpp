@@ -61,26 +61,6 @@ long double function_min(functor_class<long double> *func, const long double a, 
     return current_min;
 }
 
-//void image_fill_rose_ripples(matrix<long double> &out_double, long double n, long double a, long double b,
-//                             long double zoom) {
-//    /* FIXME: make all this stuff work for non-square images*/
-//    long double s0 = out_double.x() / 2;
-//    long double s1 = s0 / zoom;
-//    rose_dist func(n);
-//    for (int x = 0; x < out_double.x(); x++) {
-//        func.x = (x - s0) / s1;
-//        for (int y = 0; y < out_double.y(); y++) {
-//            func.y = (y - s0) / s1;
-//            out_double(x, y) = sqrt(function_min(&func, a, b, (const int) (b - a), 9));
-//        }
-//        if (x % (out_double.x() / 100) == 0) {
-//            std::cout << x << std::endl;
-//        }
-//    }
-//}
-
-
-
 int main(int argc, char const *argv[]) {
     using namespace containers;
     long double z = 200;
@@ -90,8 +70,6 @@ int main(int argc, char const *argv[]) {
         return function_min(&dist_func, 0, 30);
     };
     function_mapper_thread<decltype(thread_func), long double> func_mapper(thread_func, test_matrix);
-//    thread_pool<decltype(func_mapper)> pool(func_mapper, 2);
-//    pool.execute();
     thread_pool_func(func_mapper, 3);
     return 0;
 }
