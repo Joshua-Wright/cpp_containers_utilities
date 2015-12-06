@@ -186,12 +186,12 @@ namespace containers {
     };
 
     template<typename T, typename U>
-    bool dimensions_equal(matrix<T> &a, matrix<U> &b) {
+    bool dimensions_equal(const matrix<T> &a, const matrix<U> &b) {
         return (a.x() == b.x()) && (a.y() == b.y());
     };
 
     template<typename T, typename U>
-    void assert_same_size(matrix<T> &a, matrix<U> &b) {
+    void assert_same_size(const matrix<T> &a, const matrix<U> &b) {
         if (!dimensions_equal(a, b)) {
             throw std::invalid_argument("Dimensions must match!");
         }
