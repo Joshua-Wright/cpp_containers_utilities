@@ -18,7 +18,7 @@ namespace containers {
         F function;
         matrix<T> mat;
     public:
-        function_mapper_thread(F function, matrix<T> m) : function(function), mat(m) { };
+        function_mapper_thread(F function, matrix<T> &m) : function(function), mat(m) { };
 
         void operator()(std::atomic_ullong &current_index) {
             unsigned long long our_current_index;
