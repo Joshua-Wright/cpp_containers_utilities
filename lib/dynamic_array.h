@@ -209,6 +209,11 @@ namespace containers {
             }
         };
 
+        void clear() {
+            /*do not actually delete anything, so we can reuse memory*/
+            _size = 0;
+        }
+
     };
 
 }

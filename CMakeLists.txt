@@ -37,3 +37,8 @@ add_executable(test_thread_pool
         lib/thread_pool.h
         tests/test_thread_pool.cpp
         tests/test_thread_pool.h)
+
+add_executable(test_stack
+        lib/stack.h
+        tests/test_stack.cpp
+        )
