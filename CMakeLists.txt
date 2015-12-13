@@ -8,10 +8,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lfltk -lfltk_images")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread")
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lginac -lcln") # for ginac
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lboost_timer -lboost_system")
 
 add_executable(containers tests/test_llong_tree.cpp lib/llong_tree.cpp tests/test_thread_pool.cpp tests/test_thread_pool.h)
 
@@ -41,4 +41,12 @@ add_executable(test_thread_pool
 add_executable(test_stack
         lib/stack.h
         tests/test_stack.cpp
+        )
+
+add_executable(bench_stdlib_vector_vs_list
+        tests/bench_stdlib_vector_vs_list.cpp
+        )
+
+add_executable(fast_random
+        util/fast_random.cpp
         )
