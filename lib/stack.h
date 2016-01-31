@@ -10,8 +10,9 @@
 namespace containers {
 
     template<typename T>
+    /*protected inherritance because we don't want someone
+     * to modify the underlying list*/
     class stack : protected std::forward_list<T> {
-        /*protected inherritance because we don't want someone to modify the underlying list*/
 
     public:
 
