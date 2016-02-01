@@ -1,33 +1,34 @@
 //
-// Created by j0sh on 1/29/16.
+// Created by j0sh on 2/1/16.
 //
 
-#ifndef CONTAINERS_DOUBLE_LINKED_LIST_H
-#define CONTAINERS_DOUBLE_LINKED_LIST_H
+#ifndef CONTAINERS_SINGLE_LINKED_LIST_H
+#define CONTAINERS_SINGLE_LINKED_LIST_H
 
 #include <initializer_list>
 #include <iterator>
 #include <algorithm>
 
+
 template<typename T>
-class double_linked_list {
+class single_linked_list {
 
     template<typename U>
     class list_iterator;
 
+
     struct list_node {
-        friend class double_linked_list<T>;
+        friend class single_linked_list<T>;
 
         friend class list_iterator<T>;
 
-        list_node *_prev;
+        friend class list_iterator<const T>;
+
         list_node *_next;
         T _data;
     public:
-        list_node(const T &val = T(),
-                  list_node *_p = nullptr,
-                  list_node *_n = nullptr) : _prev(_p), _next(_n),
-                                             _data(val) { }
+        list_node(const T &val = T(), list_node *_n = nullptr) : _next(_n),
+                                                                 _data(val) { }
 
         ~list_node() {
             /*TODO: destructor?*/
@@ -39,7 +40,7 @@ class double_linked_list {
             : public std::iterator<std::bidirectional_iterator_tag, U> {
         /*inherit from iterator so that iterator traits are defined properly*/
 
-        friend class double_linked_list<T>;
+        friend class single_linked_list<T>;
 
         list_node *_current;
         bool _end;
@@ -72,25 +73,6 @@ class double_linked_list {
             return old;
         }
 
-        list_iterator<U> &operator--() {
-            if (_current->_prev != nullptr) {
-                _current = _current->_prev;
-            } else {
-                _end = true;
-            }
-            return *this;
-        }
-
-        list_iterator<U> operator--(int) {
-            list_iterator<U> old = *this;
-            if (_current->_prev != nullptr) {
-                _current = _current->_prev;
-            } else {
-                _end = true;
-            }
-            return old;
-        }
-
         T &operator*() {
             return _current->_data;
         }
@@ -107,25 +89,22 @@ class double_linked_list {
         }
     };
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
 
     list_node *_head;
     list_node *_tail;
 
 public:
-
     typedef list_node node;
     typedef list_iterator<T> iterator;
     typedef list_iterator<const T> const_iterator;
 
-    double_linked_list() : _head(nullptr), _tail(nullptr) { };
+    single_linked_list() : _head(nullptr), _tail(nullptr) { };
 
-    ~double_linked_list() {
+    ~single_linked_list() {
         clear();
     }
 
-    double_linked_list(const std::initializer_list<T> &d) : _head(nullptr),
+    single_linked_list(const std::initializer_list<T> &d) : _head(nullptr),
                                                             _tail(nullptr) {
         /*TODO: initializer list*/
         for (const auto &a : d) {
@@ -133,14 +112,14 @@ public:
         }
     }
 
-    double_linked_list(const double_linked_list<T> &r) : _head(nullptr),
+    single_linked_list(const single_linked_list<T> &r) : _head(nullptr),
                                                          _tail(nullptr) {
         for (const auto &a : r) {
             push_back(a);
         }
     }
 
-    double_linked_list<T> &operator=(const double_linked_list<T> &r) {
+    single_linked_list<T> &operator=(const single_linked_list<T> &r) {
         /*TODO: copy assignment*/
         clear();
         for (const auto &a : r) {
@@ -148,34 +127,34 @@ public:
         }
     }
 
-    double_linked_list(double_linked_list<T> &&r) {
+    single_linked_list(single_linked_list<T> &&r) {
         /*TODO: move constructor*/
     }
 
-    double_linked_list<T> &operator=(double_linked_list<T> &&r) {
+    single_linked_list<T> &operator=(single_linked_list<T> &&r) {
         /*TODO: move assignment*/
     }
 
     void push_front(const T &val) {
-        if (_head != nullptr) {
-            node *node1 = new node(val, nullptr, _head);
-            _head->_prev = node1;
-            _head = node1;
-        } else {
-            node *node1 = new node(val, nullptr, nullptr);
+        if (_head == nullptr) {
+            node *node1 = new node(val, nullptr);
             _head = node1;
             _tail = node1;
+        } else {
+            node *node1 = new node(val, _head);
+            _head = node1;
         }
 
     }
 
     void push_back(const T &val) {
-        node *node1 = new node(val, _tail, nullptr);
-        _tail = node1;
-        if (node1->_prev == nullptr) {
+        node *node1 = new node(val, nullptr);
+        if (_tail == nullptr) {
             _head = node1;
+            _tail = node1;
         } else {
-            _tail->_prev->_next = _tail;
+            _tail->_next = node1;
+            _tail = _tail->_next;
         }
     }
 
@@ -188,21 +167,6 @@ public:
                 _tail = nullptr;
             } else {
                 _head->_next = nullptr;
-            }
-        } else {
-            /*TODO: exception?*/
-        }
-    }
-
-    void pop_back() {
-        if (_tail != nullptr) {
-            node *old = _tail;
-            _tail = _tail->_prev;
-            delete old;
-            if (_tail == nullptr) {
-                _head = nullptr;
-            } else {
-                _tail->_next = nullptr;
             }
         } else {
             /*TODO: exception?*/
@@ -233,31 +197,20 @@ public:
 
     const_iterator cend() const { return const_iterator(_tail, true); }
 
-    bool operator==(const double_linked_list<T> &r) {
+    bool operator==(const single_linked_list<T> &r) {
         /*must run them both ways in case they are different lengths*/
         return std::equal(begin(), end(), r.begin()) &&
                std::equal(r.begin(), r.end(), begin());
     }
 
-    bool operator!=(const double_linked_list<T> &r) { return !(*this == r); }
+    bool operator!=(const single_linked_list<T> &r) { return !(*this == r); }
 
     iterator insert_after(const iterator &i, const T &val) {
-        /*return: iterator to inserted element*/
-        node *node1 = new node(val, i._current, i._current->_next);
-        node1->_next->_prev = node1;
-        node1->_prev->_next = node1;
-        return iterator(node1);
-        return iterator(begin());
-    }
-
-    iterator insert_before(const iterator &i, const T &val) {
-        /*return: iterator to inserted element*/
-        node *node1 = new node(val, i._current->_prev, i._current);
-        node1->_next->_prev = node1;
-        node1->_prev->_next = node1;
+        node *node1 = new node(val, i._current->_next);
+        i._current->_next = node1;
         return iterator(node1);
     }
 };
 
 
-#endif //CONTAINERS_DOUBLE_LINKED_LIST_H
+#endif //CONTAINERS_SINGLE_LINKED_LIST_H
