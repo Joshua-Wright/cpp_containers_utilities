@@ -88,6 +88,17 @@ int main() {
         test(*(linked_list1.end()) == 1, "iterator dereference");
     }
     {
+        double_linked_list<int> ll1{1, 2, 3, 4};
+        double_linked_list<int>::iterator g = ll1.begin();
+        double_linked_list<int>::iterator h = ll1.end();
+        g += 2;
+        h -= 2;
+        test(*(ll1.begin()) == 1, "iterator dereference");
+        test(*(ll1.end()) == 4, "iterator dereference");
+        test(*g == 3, "iterator addition");
+        test(*h == 2, "iterator addition");
+    }
+    {
         double_linked_list<int> linked_list1;
         double_linked_list<int> linked_list2;
         for (int i = 0; i <= 300; i++) {
@@ -127,21 +138,21 @@ int main() {
         test(l2 != l1, "!= operator 4");
     }
     {
-        double_linked_list<int> l1{1,2,3,4};
-        double_linked_list<int> l2 = {1,2,3,4};
+        double_linked_list<int> l1{1, 2, 3, 4};
+        double_linked_list<int> l2 = {1, 2, 3, 4};
         double_linked_list<int> l3;
-        l3 = {1,2,3,4};
+        l3 = {1, 2, 3, 4};
         test(l1.front() == 1, "initializer list");
         test(l2.front() == 1, "initializer list");
     }
     {
-        double_linked_list<int> l1{1,2,3,4};
+        double_linked_list<int> l1{1, 2, 3, 4};
         double_linked_list<int>::iterator it = l1.begin();
         it++;
         it++;
         l1.insert_after(it, 9);
         l1.insert_before(it, 99);
-        double_linked_list<int> l2{1,2,99,3,9,4};
+        double_linked_list<int> l2{1, 2, 99, 3, 9, 4};
         test(l1 == l2, "insert after and before");
     }
 

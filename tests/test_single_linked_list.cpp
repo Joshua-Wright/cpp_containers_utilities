@@ -81,6 +81,14 @@ int main() {
         test(*(linked_list1.end()) == 1, "iterator dereference");
     }
     {
+        single_linked_list<int> ll1{1, 2, 3, 4};
+        single_linked_list<int>::iterator g = ll1.begin();
+        g += 2;
+        test(*(ll1.begin()) == 1, "iterator dereference");
+        test(*(ll1.end()) == 4, "iterator dereference");
+        test(*g == 3, "iterator addition");
+    }
+    {
         single_linked_list<int> linked_list1;
         single_linked_list<int> linked_list2;
         for (int i = 0; i <= 300; i++) {

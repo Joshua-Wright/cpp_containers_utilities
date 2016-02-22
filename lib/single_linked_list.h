@@ -16,7 +16,6 @@ class single_linked_list {
     template<typename U>
     class list_iterator;
 
-
     struct list_node {
         friend class single_linked_list<T>;
 
@@ -73,6 +72,13 @@ class single_linked_list {
             return old;
         }
 
+        list_iterator<U> &operator+=(size_t x) {
+            for (size_t i = 0; i < x; i++) {
+                operator++();
+            }
+            return *this;
+        }
+
         T &operator*() {
             return _current->_data;
         }
@@ -89,6 +95,8 @@ class single_linked_list {
         }
     };
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
     list_node *_head;
     list_node *_tail;
@@ -133,6 +141,7 @@ public:
 
     single_linked_list<T> &operator=(single_linked_list<T> &&r) {
         /*TODO: move assignment*/
+        return *this;
     }
 
     void push_front(const T &val) {

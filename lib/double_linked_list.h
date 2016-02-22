@@ -91,6 +91,20 @@ class double_linked_list {
             return old;
         }
 
+        list_iterator<U> &operator+=(size_t x) {
+            for (size_t i = 0; i < x; i++) {
+                operator++();
+            }
+            return *this;
+        }
+
+        list_iterator<U> &operator-=(size_t x) {
+            for (size_t i = 0; i < x; i++) {
+                operator--();
+            }
+            return *this;
+        }
+
         T &operator*() {
             return _current->_data;
         }
@@ -150,10 +164,15 @@ public:
 
     double_linked_list(double_linked_list<T> &&r) {
         /*TODO: move constructor*/
+        _head = r._head;
+        _tail = r._tail;
+        r._head = nullptr;
+        r._tail = nullptr;
     }
 
     double_linked_list<T> &operator=(double_linked_list<T> &&r) {
         /*TODO: move assignment*/
+        return *this;
     }
 
     void push_front(const T &val) {
