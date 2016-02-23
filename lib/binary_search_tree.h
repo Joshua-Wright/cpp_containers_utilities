@@ -13,26 +13,34 @@
 template<typename K>
 class binary_search_tree {
 
-public:
+//public:
     /*for debugging*/
 
-    class tree_node {
+    class node {
 
         friend class binary_search_tree<K>;
 
-        tree_node *_left;
-        tree_node *_right;
-        tree_node *_parent;
-        K _key;
+        node *_left;
+        node *_right;
+        node *_parent;
+        K _value;
+
+        void set_value(const K &val) {
+            _value = val;
+            if (is_external()) {
+                _left = new node(this);
+                _right = new node(this);
+            }
+        }
 
     public:
 
-        tree_node() : _left(nullptr), _right(nullptr), _parent(nullptr) { }
+        node() : _left(nullptr), _right(nullptr), _parent(nullptr) { }
 
-        tree_node(tree_node *parent) : _left(nullptr), _right(nullptr),
-                                       _parent(parent) { }
+        node(node *parent) : _left(nullptr), _right(nullptr),
+                             _parent(parent) { }
 
-        tree_node(tree_node *parent, tree_node *left, tree_node *right)
+        node(node *parent, node *left, node *right)
                 : _left(left), _right(right), _parent(parent) { }
 
         bool is_external() { return (_left == nullptr) && (_right == nullptr); }
@@ -41,30 +49,106 @@ public:
 
         bool is_root() { return (_parent == nullptr); }
 
-        tree_node *left() { return _left; }
+        bool has_left() { return _left != nullptr; }
 
-        tree_node *right() { return _right; }
+        bool has_valued_left() {
+            return (_left != nullptr) && (_left->is_internal());
+        }
 
-        tree_node *parent() { return _parent; }
+        bool has_right() { return _right != nullptr; }
 
-        void left(tree_node *n) { _left = n; }
+        bool has_valued_right() {
+            return (_right != nullptr) && (_right->is_internal());
+        }
 
-        void right(tree_node *n) { _right = n; }
+        node *left() { return _left; }
 
-        void parent(tree_node *n) { _parent = n; }
+        node *right() { return _right; }
 
-        K key() { return _key; }
+
+        node *parent() { return _parent; }
+
+        void left(node *n) { _left = n; }
+
+        void right(node *n) { _right = n; }
+
+        void parent(node *n) { _parent = n; }
+
+        K value() { return _value; }
 
     };
 
     class tree_iterator
             : public std::iterator<std::bidirectional_iterator_tag, K> {
-        /*TODO*/
+        node *_current;
+
+        friend class binary_search_tree<K>;
+
+        static node *first_node(node *n) {
+            if (n == nullptr) {
+                return nullptr;
+            } else if (n->has_valued_left()) {
+                return first_node(n->left());
+            } else {
+                return n;
+            }
+        }
+
+        static node *next_node(node *n) {
+            /*TODO: make sure this works for empty and single node trees*/
+            if (n->has_valued_right()) {
+                /*find the right subtree*/
+                return first_node(n->right());
+            } else if (n->is_external()) {
+                /*next is the parent*/
+                return n->parent();
+            } else {
+                /*TODO: check this for nullptr validity*/
+                node *child = n;
+                node *parent = n->parent();
+                /*as long as we're coming back up from the right subtree*/
+                while ((parent->right() == child) && (!parent->is_root())) {
+                    /*traverse up the tree*/
+                    parent = parent->parent();
+                    child = child->parent();
+                }
+                if (parent->is_root() && parent->right() == child) {
+                    /*finished traversing the right subtree of the root node,
+                     * therefore we are done iterating*/
+                    return nullptr;
+                }
+                /*we just traversed up from a left subtree, so the next is the
+                 * parent of that subtree*/
+                return parent;
+            }
+        }
+
+    public:
+
+        tree_iterator(node *start) : _current(first_node(start)) { }
+
+        tree_iterator &operator++() {
+            /*TODO*/
+            _current = next_node(_current);
+            return *this;
+        }
+
+        tree_iterator &operator--() {
+            /*TODO*/
+            return *this;
+        }
+
+        K operator*() {
+            return _current->value();
+        }
+
+        bool operator!=(const tree_iterator &rhs) {
+            return rhs._current != _current;
+        }
 
     };
 
 
-    typedef tree_node node;
     typedef tree_iterator const_iterator;
     typedef tree_iterator iterator;
 
@@ -72,25 +156,24 @@ public:
     /*size is number of values stored, not number of nodes*/
     std::size_t _size;
 
+
+protected:
     node *_find_node(const K &key, node *current) {
-//        if (cur == nullptr) {
-//            cur = _root;
-//        }
         if (current->is_external()) {
+            /*done searching*/
             return current;
         }
-        if (key < current->_key) {
+        if (key < current->_value) {
+            /*search the left subtree*/
             return _find_node(key, current->left());
-        } else if (key > current->_key) {
+        } else if (key > current->_value) {
+            /*search the right subtree*/
             return _find_node(key, current->right());
         } else {
             /*we assume that if it's neither greater than nor less than, it
              * is equal*/
             return current;
         }
-
-        /*root is external, so return root*/
-//        return _root;
     }
 
 
@@ -102,29 +185,26 @@ public:
     }
 
     void insert(const K &key) {
+        /*find the node*/
         node *n = _find_node(key, _root);
-        if (n->is_external()) {
-            /*only insert the new node if it's external*/
-            /*set the key of the node*/
-            n->_key = key;
-            /*give it leaves so it's internal*/
-            n->left(new node(n));
-            n->right(new node(n));
-            /*inserted something so increment size*/
-            _size++;
-        } else {
-            /*if it's external, simply overwrite it*/
-            n->_key = key;
-        }
+        /*let it set it's own value (duplicate keys aren't allowed)*/
+        n->set_value(key);
+        /*keep track of size*/
+        _size++;
     }
 
     bool contains(const K &key) {
+        /*found internal node means it's value is valid*/
         return _find_node(key, _root)->is_internal();
     }
 
     std::size_t size() { return _size; }
 
     bool empty() { return (_size == 0); }
+
+    iterator begin() { return iterator(_root); }
+
+    iterator end() { return iterator(nullptr); }
 
 
 };

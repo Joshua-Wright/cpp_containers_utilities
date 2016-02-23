@@ -1,5 +1,7 @@
 // (c) Copyright 2015 Josh Wright
 #include <iostream>
+#include <vector>
+#include <algorithm>
 #include "../lib/binary_search_tree.h"
 
 void test(bool expr, const std::string &message) {
@@ -36,6 +38,29 @@ int main() {
         for (int i: {2, 3, 7, 8}) {
             test(!b1.contains(i), "not contains()");
         }
+    }
+    {
+        binary_search_tree<int> b1;
+        std::vector<int> test_values{6, 2, 8, 1, 4, 7, 10, 3, 5, 9};
+        for (int i : test_values) {
+            b1.insert(i);
+        }
+        std::sort(test_values.begin(), test_values.end());
+
+        /*for debugging*/
+//        size_t count = 0;
+//        for (int i : b1) {
+//            std::cout << i << "," << test_values[count] << " ";
+//            ++count;
+//            if (count > 15) {
+//                break;
+//            }
+//        }
+//        std::cout << std::endl;
+        test(std::equal(b1.begin(), b1.end(), test_values.begin()),
+             "iterators 1");
+        test(std::equal(test_values.begin(), test_values.end(), b1.begin()),
+             "iterators 2");
     }
 
     return 0;
