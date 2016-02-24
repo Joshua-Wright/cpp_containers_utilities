@@ -78,57 +78,58 @@ class binary_search_tree {
 
     };
 
+    static node *first_node(node *n) {
+        if (n == nullptr) {
+            return nullptr;
+        } else if (n->has_valued_left()) {
+            return first_node(n->left());
+        } else {
+            return n;
+        }
+    }
+
+    static node *next_node(node *n) {
+        /*TODO: make sure this works for empty and single node trees*/
+        if (n->has_valued_right()) {
+            /*find the right subtree*/
+            return first_node(n->right());
+        } else if (n->is_external()) {
+            /*next is the parent*/
+            return n->parent();
+        } else {
+            /*TODO: check this for nullptr validity*/
+            node *child = n;
+            node *parent = n->parent();
+            /*as long as we're coming back up from the right subtree*/
+            while ((parent->right() == child) && (!parent->is_root())) {
+                /*traverse up the tree*/
+                parent = parent->parent();
+                child = child->parent();
+            }
+            if (parent->is_root() && parent->right() == child) {
+                /*finished traversing the right subtree of the root node,
+                 * therefore we are done iterating*/
+                return nullptr;
+            }
+            /*we just traversed up from a left subtree, so the next is the
+             * parent of that subtree*/
+            return parent;
+        }
+    }
+
     class tree_iterator
             : public std::iterator<std::bidirectional_iterator_tag, K> {
-        node *_current;
 
         friend class binary_search_tree<K>;
 
-        static node *first_node(node *n) {
-            if (n == nullptr) {
-                return nullptr;
-            } else if (n->has_valued_left()) {
-                return first_node(n->left());
-            } else {
-                return n;
-            }
-        }
-
-        static node *next_node(node *n) {
-            /*TODO: make sure this works for empty and single node trees*/
-            if (n->has_valued_right()) {
-                /*find the right subtree*/
-                return first_node(n->right());
-            } else if (n->is_external()) {
-                /*next is the parent*/
-                return n->parent();
-            } else {
-                /*TODO: check this for nullptr validity*/
-                node *child = n;
-                node *parent = n->parent();
-                /*as long as we're coming back up from the right subtree*/
-                while ((parent->right() == child) && (!parent->is_root())) {
-                    /*traverse up the tree*/
-                    parent = parent->parent();
-                    child = child->parent();
-                }
-                if (parent->is_root() && parent->right() == child) {
-                    /*finished traversing the right subtree of the root node,
-                     * therefore we are done iterating*/
-                    return nullptr;
-                }
-                /*we just traversed up from a left subtree, so the next is the
-                 * parent of that subtree*/
-                return parent;
-            }
-        }
+        /*pointer to the node we're currently at*/
+        node *_current;
 
     public:
 
-        tree_iterator(node *start) : _current(first_node(start)) { }
+        tree_iterator(node *start) : _current(start) { }
 
         tree_iterator &operator++() {
-            /*TODO*/
             _current = next_node(_current);
             return *this;
         }
@@ -198,11 +199,15 @@ public:
         return _find_node(key, _root)->is_internal();
     }
 
+    void remove(const K &key) {
+        /*TODO*/
+    }
+
     std::size_t size() { return _size; }
 
     bool empty() { return (_size == 0); }
 
-    iterator begin() { return iterator(_root); }
+    iterator begin() { return iterator(first_node(_root)); }
 
     iterator end() { return iterator(nullptr); }
 

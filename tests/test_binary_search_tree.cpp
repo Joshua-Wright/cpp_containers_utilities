@@ -39,6 +39,7 @@ int main() {
             test(!b1.contains(i), "not contains()");
         }
     }
+
     {
         binary_search_tree<int> b1;
         std::vector<int> test_values{6, 2, 8, 1, 4, 7, 10, 3, 5, 9};
@@ -61,6 +62,21 @@ int main() {
              "iterators 1");
         test(std::equal(test_values.begin(), test_values.end(), b1.begin()),
              "iterators 2");
+    }
+
+    {
+        binary_search_tree<int> b1;
+        std::vector<int> test_values{6, 2, 8, 1, 4, 7, 10, 3, 5, 9};
+        for (int i : test_values) {
+            b1.insert(i);
+        }
+        std::sort(test_values.begin(), test_values.end());
+        b1.remove(1);
+        test_values.erase(test_values.begin());
+        test(std::equal(b1.begin(), b1.end(), test_values.begin()),
+             "remove() 1");
+        test(std::equal(test_values.begin(), test_values.end(), b1.begin()),
+             "remove() 2");
     }
 
     return 0;
