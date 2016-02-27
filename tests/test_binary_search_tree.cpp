@@ -2,13 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include "../lib/debug.h"
 #include "../lib/binary_search_tree.h"
-
-void test(bool expr, const std::string &message) {
-    if (!expr) {
-        std::cout << "Test failed: " << message << std::endl;
-    }
-}
 
 
 int main() {

@@ -43,6 +43,11 @@ class binary_search_tree {
         node(node *parent, node *left, node *right)
                 : _left(left), _right(right), _parent(parent) { }
 
+        ~node() {
+            delete _left;
+            delete _right;
+        }
+
         bool is_external() { return (_left == nullptr) && (_right == nullptr); }
 
         bool is_internal() { return (_left != nullptr) || (_right != nullptr); }
@@ -51,14 +56,18 @@ class binary_search_tree {
 
         bool has_left() { return _left != nullptr; }
 
-        bool has_valued_left() {
+        bool has_right() { return _right != nullptr; }
+
+        bool has_internal_left() {
             return (_left != nullptr) && (_left->is_internal());
         }
 
-        bool has_right() { return _right != nullptr; }
-
-        bool has_valued_right() {
+        bool has_internal_right() {
             return (_right != nullptr) && (_right->is_internal());
+        }
+
+        bool has_internal_child() {
+            return (has_internal_left() || has_internal_right());
         }
 
         node *left() { return _left; }
@@ -81,7 +90,7 @@ class binary_search_tree {
     static node *first_node(node *n) {
         if (n == nullptr) {
             return nullptr;
-        } else if (n->has_valued_left()) {
+        } else if (n->has_internal_left()) {
             return first_node(n->left());
         } else {
             return n;
@@ -90,7 +99,7 @@ class binary_search_tree {
 
     static node *next_node(node *n) {
         /*TODO: make sure this works for empty and single node trees*/
-        if (n->has_valued_right()) {
+        if (n->has_internal_right()) {
             /*find the right subtree*/
             return first_node(n->right());
         } else if (n->is_external()) {
@@ -201,6 +210,25 @@ public:
 
     void remove(const K &key) {
         /*TODO*/
+        node *n = _find_node(key, _root);
+        if (n->has_internal_child()) {
+            /*handle deleting internal node with internal children*/
+        } else {
+            /*node has no internal children*/
+            if (!n->is_root()) {
+                node *p = n->parent();
+                if (p->right() == n) {
+                    /*we're deleting the right node of this parent node*/
+                    delete n; /*expect the node to clean up it's children*/
+                    /*give the parent node a leaf child in n's place*/
+                    p->right(new node(p));
+                } else {
+                    /*same thing for left child*/
+                    delete n;
+                    p->left(new node(p));
+                }
+            }
+        }
     }
 
     std::size_t size() { return _size; }

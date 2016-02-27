@@ -2,17 +2,8 @@
 
 #include <iostream>
 #include <string.h>
-#include <libgen.h> // for basename()
+#include "../lib/debug.h"
 #include "../lib/array_list.h"
-
-void test(bool expr, const std::string &message, const char* file, int line) {
-    if (!expr) {
-        char* new_str = new char[strlen(file) + 1];
-        strcpy(new_str, file);
-        std::cout << basename(new_str) << ":"<< line << "  Test failed: " << message << std::endl;
-    }
-}
-#define test(x,y) test(x,y, __FILE__, __LINE__)
 
 int main() {
     using std::cout;
@@ -27,13 +18,17 @@ int main() {
         test(!al1.empty(), "push_back()");
         test(al1.front() == 5, "front()");
         test(al1.back() == 5, "back()");
-        test(false, "a");
         al1.push_back(2);
         al1.push_back(3);
         al1.push_back(4);
-        cout << al1.front() << endl;
         test(al1.front() == 5, "front()");
         test(al1.back() == 4, "back()");
+        al1.push_front(2);
+        al1.push_front(3);
+        al1.push_front(4);
+        al1.push_back(123);
+        test(al1.front() == 4, "front()");
+        test(al1.back() == 123, "back()");
     }
 
     return 0;

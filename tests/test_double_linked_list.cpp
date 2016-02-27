@@ -5,16 +5,9 @@
 #include <cassert>
 #include <thread>
 #include <mutex>
+#include "../lib/debug.h"
 #include "../lib/double_linked_list.h"
 
-void test(bool expr, const std::string &message) {
-    if (!expr) {
-        std::cout << "Test failed: " << message << std::endl;
-    }
-}
-
-//int main(int argc, char const *argv[]) {
-/*don't have arguments so g++ doesn't complain*/
 int main() {
     /*template:
     {
@@ -24,13 +17,13 @@ int main() {
     }
     */
     {
-        std::string test("Constructor");
+        std::string current_test("Constructor");
         try {
             double_linked_list<int> linked_list1;
             double_linked_list<double> linked_list2;
             /*mutexes can't be copied*/
             double_linked_list<std::mutex> linked_list3;
-        } catch (...) { std::cout << "Test failed: " << test << std::endl; }
+        } catch (...) { std::cout << "Test failed: " << current_test << std::endl; }
     }
     {
         double_linked_list<int> linked_list1;
