@@ -65,3 +65,5 @@ add_executable(test_single_linked_list lib/single_linked_list.h tests/test_singl
 add_executable(test_binary_search_tree lib/binary_search_tree.h tests/test_binary_search_tree.cpp)
 
 add_executable(test_array_list tests/test_array_list.cpp lib/array_list.h)
+
+add_executable(test_debug tests/test_debug.cpp)
