@@ -57,7 +57,8 @@ class array_list {
 
     public:
 
-        list_iterator(node_container &data, size_t n, bool end = false) : _current(
+        list_iterator(node_container &data, size_t n, bool end = false)
+                : _current(
                 n), _data(data), _end(end) {
         }
 
@@ -179,14 +180,45 @@ class array_list {
         _size++;
     }
 
+    void _erase(size_t idx) {
+        if (_size <= 1) {
+            /*only one node, so we don't have to bother updating other nodes*/
+            _head = npos;
+            _tail = npos;
+        } else {
+            if (_data.at(idx)._prev != npos) {
+                /*link previous to next*/
+                _data.at(_data.at(idx)._prev)._next = _data.at(idx)._next;
+            } else {
+                /*update head*/
+                _head = _data.at(idx)._next;
+            }
+            if (_data.at(idx)._next != npos) {
+                /*link next to previous*/
+                _data.at(_data.at(idx)._next)._prev = _data.at(idx)._prev;
+            } else {
+                /*update tail*/
+                _tail = _data.at(idx)._prev;
+            }
+        }
+        /*add this index to our list of holes*/
+        _holes.push_back(idx);
+        /*update size*/
+        _size--;
+    }
+
 public:
 
     array_list() : _head(npos), _tail(npos), _size(0) { };
 
-    /*TODO: initialize to specified size*/
+    array_list(const size_t sz, const T &val = T()) : array_list() {
+        _data.reserve(sz);
+        for (size_t i = 0; i < sz; ++i) {
+            push_back(val);
+        }
+    }
 
-    array_list(const std::initializer_list<T> &d) : _head(npos), _tail(npos),
-                                                    _size(0) {
+    array_list(const std::initializer_list<T> &d) : array_list() {
         _data.reserve(d.size());
         for (const auto &a : d) {
             push_back(a);
@@ -194,7 +226,13 @@ public:
 
     }
 
-    /*TODO: reserve*/
+    void reserve(size_t sz) {
+        /*do nothing if smaller than current size, since resizing vector may
+         * erase valid elements*/
+        if (sz > _data.capacity()) {
+            _data.reserve(sz);
+        }
+    }
 
 
     void push_back(const T &val) {
@@ -208,7 +246,8 @@ public:
         }
         _size++;
     }
-    void insert(iterator p, const T& val) {
+
+    void insert(iterator p, const T &val) {
         _insert(p._current, val);
     }
 
@@ -224,19 +263,15 @@ public:
         _size++;
     }
 
-    /*TODO: insert*/
-
-    /*TODO: erase*/
+    void erase(iterator p) {
+        if (!p._end) {
+            _erase(p._current);
+        }
+    }
 
     void pop_back() {
         if (_size > 0) {
-            /*add the old tail index to the empty list*/
-            _holes.push_back(_tail);
-            /*update the tail index*/
-            _tail = _data.at(_tail)._prev;
-            /*update the second to last node's next index*/
-            _data.at(_tail)._next = npos;
-            _size--;
+            _erase(_tail);
         } else {
             /*TODO: throw exception*/
         }
@@ -244,13 +279,7 @@ public:
 
     void pop_front() {
         if (_size > 0) {
-            /*add the old tail index to the empty list*/
-            _holes.push_back(_head);
-            /*update the tail index*/
-            _head = _data.at(_head)._next;
-            /*update the second to last node's next index*/
-            _data.at(_head)._prev = npos;
-            _size--;
+            _erase(_head);
         } else {
             /*TODO: throw exception*/
         }
@@ -259,16 +288,18 @@ public:
     /*TODO: swap*/
 
     T &front() {
+        /*TODO: exception on empty list?*/
         return _data.at(_head)._value;
     }
 
     T &back() {
+        /*TODO: exception on empty list?*/
         return _data.at(_tail)._value;
     }
 
-    iterator begin() { return list_iterator<T>(_data, _head, false); }
+    iterator begin() { return iterator(_data, _head, false); }
 
-    iterator end() { return list_iterator<T>(_data, _tail, true); }
+    iterator end() { return iterator(_data, _tail, true); }
 
     /*TODO: const iterators*/
 
