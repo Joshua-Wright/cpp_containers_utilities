@@ -22,8 +22,8 @@ class array_list {
     struct list_node {
         friend class array_list<T>;
 
-        friend class iterator;
-        friend class const_iterator;
+//        friend class iterator;
+//        friend class const_iterator;
 
         size_t _prev;
         size_t _next;
@@ -131,7 +131,6 @@ class array_list {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-    typedef list_iterator<const T> const_iterator;
     typedef list_node node;
     typedef list_iterator<T> iterator;
     typedef list_iterator<const T> const_iterator;
@@ -162,9 +161,29 @@ class array_list {
         }
     }
 
+    void _insert(size_t idx, const T &val) {
+        /*inserts *after* the value*/
+        if (idx == npos) {
+            /*probably shouldn't be able to insert after past-end iterator, but
+             * we'll allow it anyway*/
+            push_back(val);
+        } else {
+            size_t node1 = new_node(val, idx, _data.at(idx)._next);
+            /*inform the previous node of the insertion*/
+            _data.at(_data.at(node1)._prev)._next = node1;
+            /*and the next node, if it exists*/
+            if (_data.at(node1)._next != npos) {
+                _data.at(_data.at(node1)._next)._prev = node1;
+            }
+        }
+        _size++;
+    }
+
 public:
 
     array_list() : _head(npos), _tail(npos), _size(0) { };
+
+    /*TODO: initialize to specified size*/
 
     array_list(const std::initializer_list<T> &d) : _head(npos), _tail(npos),
                                                     _size(0) {
@@ -174,6 +193,8 @@ public:
         }
 
     }
+
+    /*TODO: reserve*/
 
 
     void push_back(const T &val) {
@@ -187,6 +208,9 @@ public:
         }
         _size++;
     }
+    void insert(iterator p, const T& val) {
+        _insert(p._current, val);
+    }
 
     void push_front(const T &val) {
         size_t next_node = _head;
@@ -199,6 +223,10 @@ public:
         }
         _size++;
     }
+
+    /*TODO: insert*/
+
+    /*TODO: erase*/
 
     void pop_back() {
         if (_size > 0) {
@@ -228,7 +256,7 @@ public:
         }
     }
 
-    /*TODO: insert*/
+    /*TODO: swap*/
 
     T &front() {
         return _data.at(_head)._value;

@@ -80,6 +80,22 @@ int main() {
         test(std::equal(al1.begin(), al1.begin(), il1.begin()), "init. list");
         test(std::equal(il1.begin(), il1.begin(), al1.begin()), "init. list");
     }
+    {
+        array_list<char> al1{1,2,3,4,5};
+        auto it1 = al1.begin();
+        while (it1 != al1.end()) {
+            if (((*it1) % 2 ) == 0) {
+                al1.insert(it1, 123);
+                ++it1;
+            }
+            ++it1;
+        }
+        al1.insert(--al1.end(), 34);
+        al1.insert(al1.end(), 99);
+        std::initializer_list<char> il1{1,2,123,3,4,123,5,34,99};
+        test(std::equal(al1.begin(), al1.begin(), il1.begin()), "insert");
+        test(std::equal(il1.begin(), il1.begin(), al1.begin()), "insert");
+    }
 
     return 0;
 }
