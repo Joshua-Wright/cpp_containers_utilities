@@ -13,7 +13,6 @@ template<typename T>
 class array_list {
 
     typedef std::size_t size_t;
-//    using std::size_t;
     /*equivalent of nullptr for index*/
     static constexpr size_t npos = std::numeric_limits<size_t>::max();
 
@@ -23,7 +22,8 @@ class array_list {
     struct list_node {
         friend class array_list<T>;
 
-        friend class list_iterator<T>;
+        friend class iterator;
+        friend class const_iterator;
 
         size_t _prev;
         size_t _next;
@@ -41,9 +41,7 @@ class array_list {
 
     };
 
-//    typedef std::vector vector;
-//    using std::vector;
-    typedef std::vector<list_node> buffer;
+    typedef std::vector<list_node> node_container;
 
 
     template<typename U>
@@ -54,13 +52,12 @@ class array_list {
         friend class array_list<T>;
 
         size_t _current;
-//        vector<list_node<T>> *_data;
-        buffer *_data;
+        node_container &_data;
         bool _end;
 
     public:
 
-        list_iterator(buffer *data, size_t n, bool end = false) : _current(
+        list_iterator(node_container &data, size_t n, bool end = false) : _current(
                 n), _data(data), _end(end) {
         }
 
@@ -69,8 +66,8 @@ class array_list {
         /*TODO: copy assignment*/
 
         list_iterator<U> &operator++() {
-            if (_data->at(_current)._next != npos) {
-                _current = _data->at(_current).next;
+            if (_data.at(_current)._next != npos) {
+                _current = _data.at(_current)._next;
             } else {
                 _end = true;
             }
@@ -84,8 +81,12 @@ class array_list {
         }
 
         list_iterator<U> &operator--() {
-            if (_data->at(_current)._prev != npos) {
-                _current = _data->at(_current)._prev;
+            if (_end) {
+                /*fallback to the end value, so that decrementing the past-end
+                 * iteratork works properly*/
+                _end = false;
+            } else if (_data.at(_current)._prev != npos) {
+                _current = _data.at(_current)._prev;
             } else {
                 _end = true;
             }
@@ -113,7 +114,7 @@ class array_list {
         }
 
         T &operator*() {
-            return _data->at(_current)._value;
+            return _data.at(_current)._value;
         }
 
         bool operator==(const list_iterator<U> &rhs) {
@@ -133,13 +134,14 @@ class array_list {
     typedef list_iterator<const T> const_iterator;
     typedef list_node node;
     typedef list_iterator<T> iterator;
+    typedef list_iterator<const T> const_iterator;
 
     /*indexes of the head and tail node*/
     size_t _head, _tail;
     /*size of the list*/
     size_t _size;
     /*the memory where we store our nodes*/
-    buffer _data;
+    node_container _data;
     /*a vector of the holes in this memory that need to be filled*/
     std::vector<size_t> _holes;
 
@@ -163,6 +165,15 @@ class array_list {
 public:
 
     array_list() : _head(npos), _tail(npos), _size(0) { };
+
+    array_list(const std::initializer_list<T> &d) : _head(npos), _tail(npos),
+                                                    _size(0) {
+        _data.reserve(d.size());
+        for (const auto &a : d) {
+            push_back(a);
+        }
+
+    }
 
 
     void push_back(const T &val) {
@@ -217,6 +228,8 @@ public:
         }
     }
 
+    /*TODO: insert*/
+
     T &front() {
         return _data.at(_head)._value;
     }
@@ -224,6 +237,12 @@ public:
     T &back() {
         return _data.at(_tail)._value;
     }
+
+    iterator begin() { return list_iterator<T>(_data, _head, false); }
+
+    iterator end() { return list_iterator<T>(_data, _tail, true); }
+
+    /*TODO: const iterators*/
 
     size_t size() { return _size; }
 

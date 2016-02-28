@@ -141,7 +141,6 @@ public:
 
     double_linked_list(const std::initializer_list<T> &d) : _head(nullptr),
                                                             _tail(nullptr) {
-        /*TODO: initializer list*/
         for (const auto &a : d) {
             push_back(a);
         }

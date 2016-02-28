@@ -58,6 +58,28 @@ int main() {
         test(al1.front() == 4, "pop_front()");
         test(al1.size() == 1, "pop_front()");
     }
+    {
+        array_list<int> al1;
+        for (int i=0; i<5; i++) {
+            al1.push_back(i);
+        }
+        auto it1 = al1.begin();
+        for (int i=0; i<5; ++i) {
+            test(*it1 == i, "iterators");
+            ++it1;
+        }
+        auto it2 = --al1.end();
+        for (int i=4; i>=0; --i) {
+            test(*it2 == i, "iterators");
+            --it2;
+        }
+    }
+    {
+        std::initializer_list<char> il1{1, 2, 3, 65, 1, 3, -123, 123, 4, 2, -3, 2, 1, 43};
+        array_list<char> al1{1, 2, 3, 65, 1, 3, -123, 123, 4, 2, -3, 2, 1, 43};
+        test(std::equal(al1.begin(), al1.begin(), il1.begin()), "init. list");
+        test(std::equal(il1.begin(), il1.begin(), al1.begin()), "init. list");
+    }
 
     return 0;
 }
