@@ -146,9 +146,12 @@ class array_list {
     size_t new_node(const T &val = T(), size_t _p = npos, size_t _n = npos) {
         if (!_holes.empty()) {
             /*allocate a node from a hole in the array*/
-            /*TODO*/
-            throw std::runtime_error("not implemented");
-//            return npos;
+            size_t next_idx = _holes.back();
+            _holes.pop_back();
+            _data.at(next_idx)._value = val;
+            _data.at(next_idx)._prev = _p;
+            _data.at(next_idx)._next = _n;
+            return next_idx;
         } else {
             /*push it back in the array*/
             _data.emplace_back(val, _p, _n);
@@ -184,6 +187,34 @@ public:
             _data.at(next_node)._prev = node1;
         }
         _size++;
+    }
+
+    void pop_back() {
+        if (_size > 0) {
+            /*add the old tail index to the empty list*/
+            _holes.push_back(_tail);
+            /*update the tail index*/
+            _tail = _data.at(_tail)._prev;
+            /*update the second to last node's next index*/
+            _data.at(_tail)._next = npos;
+            _size--;
+        } else {
+            /*TODO: throw exception*/
+        }
+    }
+
+    void pop_front() {
+        if (_size > 0) {
+            /*add the old tail index to the empty list*/
+            _holes.push_back(_head);
+            /*update the tail index*/
+            _head = _data.at(_head)._next;
+            /*update the second to last node's next index*/
+            _data.at(_head)._prev = npos;
+            _size--;
+        } else {
+            /*TODO: throw exception*/
+        }
     }
 
     T &front() {
