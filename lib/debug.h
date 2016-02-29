@@ -67,11 +67,11 @@ void __debug_log(T v, const char *l, const char *f, int line, bool p) {
 #define debug_log_notype(x) __debug_log(x, #x, __FILE__, __LINE__, false)
 
 
-void __test(bool expr, const std::string &message, const char *file, int line) {
+void __test(bool expr, const char* expr_str, const std::string &message, const char *file, int line) {
     if (!expr) {
         std::cerr << basename(file) << ":" << line << "  Test failed: " <<
-        message << std::endl;
+        message << " : " << expr_str << std::endl;
     }
 }
 
-#define test(expr, label) __test(expr, label, __FILE__, __LINE__)
+#define test(expr, label) __test(expr, #expr, label, __FILE__, __LINE__)

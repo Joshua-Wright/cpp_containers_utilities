@@ -4,7 +4,13 @@
 
 int main() {
     test(true, "This should succeed and not show");
+    bool variable_that_is_false = false;
+    bool variable_that_is_true = true;
     test(false, "This outght to fail");
+    test(variable_that_is_true, "This should succeed and not show");
+    test(!variable_that_is_false, "This should succeed and not show");
+    test(variable_that_is_false, "This outght to fail");
+    test(!variable_that_is_true, "This outght to fail");
 
     std::string var = "asdf";
     int var2 = 1234;
