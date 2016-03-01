@@ -73,7 +73,9 @@ class double_linked_list {
         }
 
         list_iterator<U> &operator--() {
-            if (_current->_prev != nullptr) {
+            if (_end) {
+                _end = false;
+            } else if (_current->_prev != nullptr) {
                 _current = _current->_prev;
             } else {
                 _end = true;
@@ -252,28 +254,47 @@ public:
     const_iterator cend() const { return const_iterator(_tail, true); }
 
     bool operator==(const double_linked_list<T> &r) {
-        /*must run them both ways in case they are different lengths*/
-        return std::equal(begin(), end(), r.begin()) &&
-               std::equal(r.begin(), r.end(), begin());
+        double_linked_list<T>::const_iterator lhs_it = cbegin();
+        double_linked_list<T>::const_iterator rhs_it = r.cbegin();
+        /*while both iterators are valid*/
+        while (lhs_it != cend() && rhs_it != r.cend()) {
+            if (*lhs_it != *rhs_it) {
+                /*mismatch found, therefore unequal*/
+                return false;
+            }
+            ++rhs_it;
+            ++lhs_it;
+        }
+        /*if they aren't both at the end, the range size is unequal*/
+        return (lhs_it == cend()) && (rhs_it == r.cend());
     }
 
     bool operator!=(const double_linked_list<T> &r) { return !(*this == r); }
 
     iterator insert_after(const iterator &i, const T &val) {
         /*return: iterator to inserted element*/
-        node *node1 = new node(val, i._current, i._current->_next);
-        node1->_next->_prev = node1;
-        node1->_prev->_next = node1;
-        return iterator(node1);
-        return iterator(begin());
+        if (i._current == _tail) {
+            push_back(val);
+            return iterator(_tail);
+        } else {
+            node *node1 = new node(val, i._current, i._current->_next);
+            node1->_next->_prev = node1;
+            node1->_prev->_next = node1;
+            return iterator(node1);
+        }
     }
 
     iterator insert_before(const iterator &i, const T &val) {
         /*return: iterator to inserted element*/
-        node *node1 = new node(val, i._current->_prev, i._current);
-        node1->_next->_prev = node1;
-        node1->_prev->_next = node1;
-        return iterator(node1);
+        if (i._current == _head) {
+            push_front(val);
+            return iterator(_head);
+        } else {
+            node *node1 = new node(val, i._current->_prev, i._current);
+            node1->_next->_prev = node1;
+            node1->_prev->_next = node1;
+            return iterator(node1);
+        }
     }
 };
 

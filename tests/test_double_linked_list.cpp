@@ -23,7 +23,9 @@ int main() {
             double_linked_list<double> linked_list2;
             /*mutexes can't be copied*/
             double_linked_list<std::mutex> linked_list3;
-        } catch (...) { std::cout << "Test failed: " << current_test << std::endl; }
+        } catch (...) {
+            std::cout << "Test failed: " << current_test << std::endl;
+        }
     }
     {
         double_linked_list<int> linked_list1;
@@ -83,7 +85,7 @@ int main() {
     {
         double_linked_list<int> ll1{1, 2, 3, 4};
         double_linked_list<int>::iterator g = ll1.begin();
-        double_linked_list<int>::iterator h = ll1.end();
+        double_linked_list<int>::iterator h = --ll1.end();
         g += 2;
         h -= 2;
         test(*(ll1.begin()) == 1, "iterator dereference");
@@ -147,6 +149,17 @@ int main() {
         l1.insert_before(it, 99);
         double_linked_list<int> l2{1, 2, 99, 3, 9, 4};
         test(l1 == l2, "insert after and before");
+    }
+    {
+        double_linked_list<int> l1{1, 2, 3, 4};
+        auto it1 = l1.begin();
+        l1.insert_before(it1, 5);
+        l1.insert_after(it1, 7);
+        auto it2 = --l1.end();
+        l1.insert_before(it2, 20);
+        l1.insert_after(it2, 32);
+        double_linked_list<int> l2{5, 1, 7, 2, 3, 20, 4, 32};
+        test(l1 == l2, "insert before and after");
     }
 
 
