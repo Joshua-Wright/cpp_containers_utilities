@@ -84,6 +84,14 @@ namespace containers {
             return data + height * width;
         }
 
+        const T *cbegin() const { // first element
+            return (T *) data;
+        }
+
+        const T *cend() const { // past the end pointer
+            return data + height * width;
+        }
+
         T &operator()(const std::size_t x, const std::size_t y) {
             if (x >= width || y >= height) {
                 throw std::out_of_range("out of range");
