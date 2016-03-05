@@ -186,6 +186,20 @@ protected:
         }
     }
 
+    size_t _height(node *n = nullptr) {
+        if (n == nullptr) {
+            n = _root;
+        }
+        if (n->is_external()) {
+            return 0;
+        } else {
+            size_t h_left = _height(n->_left) + 1;
+            size_t h_right = _height(n->_right) + 1;
+            /*max of the two heights*/
+            return (h_left > h_right) ? h_left : h_right;
+        }
+    }
+
 
 public:
 
@@ -238,6 +252,8 @@ public:
     iterator begin() { return iterator(first_node(_root)); }
 
     iterator end() { return iterator(nullptr); }
+
+    size_t max_height() { return _height(_root); }
 
 
 };
