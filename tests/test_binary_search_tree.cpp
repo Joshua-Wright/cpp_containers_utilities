@@ -73,6 +73,26 @@ int main() {
         test(std::equal(test_values.begin(), test_values.end(), b1.begin()),
              "remove() 2");
     }
+    {
+        binary_search_tree<int> b1;
+        b1.insert(1);
+        b1.insert(2);
+        b1.insert(3);
+        test(b1.max_height() == 3, "max_height()");
+        test(b1.size() == 3, "size after max_height");
+        binary_search_tree<int> b2;
+        b2.insert(6);
+        b2.insert(3);
+        b2.insert(1);
+        b2.insert(4);
+        b2.insert(8);
+        b2.insert(9);
+        b2.insert(7);
+        test(b2.max_height() == 3, "max_height()");
+        test(b2.size() == 7, "size after max_height");
+        b1.print_tree();
+        b2.print_tree();
+    }
 
     return 0;
 }

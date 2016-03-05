@@ -188,7 +188,8 @@ protected:
 
     size_t _height(node *n = nullptr) {
         if (n == nullptr) {
-            n = _root;
+            // n = _root;
+            return 0;
         }
         if (n->is_external()) {
             return 0;
@@ -255,6 +256,27 @@ public:
 
     size_t max_height() { return _height(_root); }
 
+
+    void print_tree(node* start = nullptr, const size_t indent = 0) {
+        if (start == nullptr) {
+            start = _root;
+        }
+        /*print current nodenode*/
+        for (size_t i=0; i<indent; i++){std::cout << "\t";}
+        std::cout << start->_value << std::endl;
+        /*print left node if it exists*/
+        // for (size_t i=0; i<indent; i++){std::cout << "\t";}
+        if (start->has_internal_left()) {
+            print_tree(start->_left, indent + 1);
+        }
+        /*print right node if it exists*/
+        // for (size_t i=0; i<indent; i++){std::cout << "\t";}
+        if (start->has_internal_right()) {
+            print_tree(start->_right, indent + 1);
+        }
+        
+        
+    }
 
 };
 
