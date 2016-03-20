@@ -1,4 +1,4 @@
-// (c) Copyright 2015 Josh Wright
+// (c) Copyright 2016 Josh Wright
 #ifndef CONTAINERS_DYNAMIC_ARRAY_H
 #define CONTAINERS_DYNAMIC_ARRAY_H
 

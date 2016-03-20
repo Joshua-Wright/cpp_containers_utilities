@@ -1,4 +1,4 @@
-// (c) Copyright 2015 Josh Wright
+// (c) Copyright 2016 Josh Wright
 #include <iostream>
 #include "../lib/thread_pool.h"
 #include "../lib/matrix.h"

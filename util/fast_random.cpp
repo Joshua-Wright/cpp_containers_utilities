@@ -1,4 +1,4 @@
-// (c) Copyright 2015 Josh Wright
+// (c) Copyright 2016 Josh Wright
 /* for when you want lots and lots of random data for testing,
  * but don't really care about the randomness of that random data.
  * NOT FOR CRYPTOGRAPHIC USES, THIS IS NOT NEARLY RANDOM ENOUGH FOR THAT!!

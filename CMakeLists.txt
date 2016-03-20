@@ -47,3 +47,5 @@ add_executable(test_binary_search_tree lib/binary_search_tree.h tests/test_binar
 add_executable(test_array_list tests/test_array_list.cpp lib/array_list.h)
 
 add_executable(test_debug tests/test_debug.cpp)
+
+add_executable(test_arg_parser tests/test_arg_parser.cpp lib/arg_parser.cpp lib/arg_parser.h)

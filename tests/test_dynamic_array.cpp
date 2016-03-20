@@ -1,9 +1,9 @@
-// (c) Copyright 2015 Josh Wright
+// (c) Copyright 2016 Josh Wright
 #include <iostream>
 #include <cassert>
 #include "../lib/dynamic_array.h"
 
-// (c) Copyright 2015 Josh Wright
+// (c) Copyright 2016 Josh Wright
 int main(int argc, char const *argv[]) {
     using containers::dynamic_array;
     {
