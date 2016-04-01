@@ -13,12 +13,14 @@ namespace containers {
         __restrict__ T *data;
 
     public:
-        matrix(const std::size_t x, const std::size_t y, const T initial_value = T()) : width(x), height(y),
-                                                                                        data(new T[width * height]) {
+        matrix(const std::size_t x, const std::size_t y,
+               const T initial_value = T()) : width(x), height(y),
+                                              data(new T[width * height]) {
             std::fill_n(data, width * height, initial_value);
         };
 
-        matrix(const matrix<T> &lhs) : width(lhs.width), height(lhs.height), data(new T[width * height]) {
+        matrix(const matrix<T> &lhs) : width(lhs.width), height(lhs.height),
+                                       data(new T[width * height]) {
             std::copy_n(lhs.data, width * height, data);
         }
 
@@ -35,7 +37,8 @@ namespace containers {
             return *this;
         }
 
-        matrix(matrix<T> &&lhs) : width(lhs.width), height(lhs.height), data(lhs.data) {
+        matrix(matrix<T> &&lhs) : width(lhs.width), height(lhs.height),
+                                  data(lhs.data) {
             lhs.data = nullptr;
             lhs.width = 0;
             lhs.height = 0;
@@ -96,7 +99,7 @@ namespace containers {
             if (x >= width || y >= height) {
                 throw std::out_of_range("out of range");
             }
-            return data[x * height + y];
+            return data[y * width + x];
         }
 
         const T &operator()(const std::size_t x, const std::size_t y) const {
@@ -128,68 +131,91 @@ namespace containers {
 
         template<typename F>
         matrix<T> &operator*=(const F &lhs) {
-            std::transform(begin(), end(), begin(), [&lhs](const T &n) { return n * lhs; });
+            std::transform(begin(), end(), begin(),
+                           [&lhs](const T &n) { return n * lhs; });
             return *this;
         };
 
         template<typename F>
         matrix<T> &operator/=(const F &lhs) {
-            std::transform(begin(), end(), begin(), [&lhs](const T &n) { return n / lhs; });
+            std::transform(begin(), end(), begin(),
+                           [&lhs](const T &n) { return n / lhs; });
             return *this;
         };
 
         template<typename F>
         matrix<T> &operator+=(const F &lhs) {
-            std::transform(begin(), end(), begin(), [&lhs](const T &n) { return n + lhs; });
+            std::transform(begin(), end(), begin(),
+                           [&lhs](const T &n) { return n + lhs; });
             return *this;
         };
 
         template<typename F>
         matrix<T> &operator-=(const F &lhs) {
-            std::transform(begin(), end(), begin(), [&lhs](const T &n) { return n - lhs; });
+            std::transform(begin(), end(), begin(),
+                           [&lhs](const T &n) { return n - lhs; });
             return *this;
         };
 
         template<typename F>
         matrix<T> &operator%=(const F &lhs) {
-            std::transform(begin(), end(), begin(), [&lhs](const T &n) { return n % lhs; });
+            std::transform(begin(), end(), begin(),
+                           [&lhs](const T &n) { return n % lhs; });
             return *this;
         };
 
         template<typename U>
         matrix<T> &operator*=(const matrix<U> &lhs) {
             assert_same_size(*this, lhs);
-            std::transform(begin(), end(), lhs.begin(), begin(), [](const T &a, const U &b) { return a * b; });
+            std::transform(begin(), end(), lhs.begin(), begin(),
+                           [](const T &a, const U &b) { return a * b; });
             return *this;
         };
 
         template<typename U>
         matrix<T> &operator/=(const matrix<U> &lhs) {
             assert_same_size(*this, lhs);
-            std::transform(begin(), end(), lhs.begin(), begin(), [](const T &a, const U &b) { return a / b; });
+            std::transform(begin(), end(), lhs.begin(), begin(),
+                           [](const T &a, const U &b) { return a / b; });
             return *this;
         };
 
         template<typename U>
         matrix<T> &operator+=(const matrix<U> &lhs) {
             assert_same_size(*this, lhs);
-            std::transform(begin(), end(), lhs.begin(), begin(), [](const T &a, const U &b) { return a + b; });
+            std::transform(begin(), end(), lhs.begin(), begin(),
+                           [](const T &a, const U &b) { return a + b; });
             return *this;
         };
 
         template<typename U>
         matrix<T> &operator-=(const matrix<U> &lhs) {
             assert_same_size(*this, lhs);
-            std::transform(begin(), end(), lhs.begin(), begin(), [](const T &a, const U &b) { return a - b; });
+            std::transform(begin(), end(), lhs.begin(), begin(),
+                           [](const T &a, const U &b) { return a - b; });
             return *this;
         };
 
         template<typename U>
         matrix<T> &operator%=(const matrix<U> &lhs) {
             assert_same_size(*this, lhs);
-            std::transform(begin(), end(), lhs.begin(), begin(), [](const T &a, const U &b) { return a % b; });
+            std::transform(begin(), end(), lhs.begin(), begin(),
+                           [](const T &a, const U &b) { return a % b; });
             return *this;
         };
+
+        template<typename U>
+        bool operator==(const matrix<U> &lhs) {
+            if (!dimensions_equal(*this, lhs)) {
+                return false;
+            }
+            return std::equal(begin(), end(), lhs.begin());
+        }
+
+        template<typename U>
+        bool operator!=(const matrix<U> &lhs) {
+            return !((*this) == lhs);
+        }
 
     };
 
