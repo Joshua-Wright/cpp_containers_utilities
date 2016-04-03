@@ -10,18 +10,18 @@ namespace containers {
     template<typename T>
     class matrix {
         std::size_t width, height;
-        __restrict__ T *data;
+        T *_data;
 
     public:
         matrix(const std::size_t x, const std::size_t y,
                const T initial_value = T()) : width(x), height(y),
-                                              data(new T[width * height]) {
-            std::fill_n(data, width * height, initial_value);
+                                              _data(new T[width * height]) {
+            std::fill_n(_data, width * height, initial_value);
         };
 
         matrix(const matrix<T> &lhs) : width(lhs.width), height(lhs.height),
-                                       data(new T[width * height]) {
-            std::copy_n(lhs.data, width * height, data);
+                                       _data(new T[width * height]) {
+            std::copy_n(lhs._data, width * height, _data);
         }
 
         matrix &operator=(const matrix<T> &lhs) {
@@ -29,17 +29,17 @@ namespace containers {
                 /*we are being assigned to ourself*/
                 return *this;
             }
-            delete[] data;
+            delete[] _data;
             width = lhs.width;
             height = lhs.height;
-            data = new T[width * height];
-            std::copy_n(lhs.data, width * height, data);
+            _data = new T[width * height];
+            std::copy_n(lhs._data, width * height, _data);
             return *this;
         }
 
         matrix(matrix<T> &&lhs) : width(lhs.width), height(lhs.height),
-                                  data(lhs.data) {
-            lhs.data = nullptr;
+                                  _data(lhs._data) {
+            lhs._data = nullptr;
             lhs.width = 0;
             lhs.height = 0;
         }
@@ -49,11 +49,11 @@ namespace containers {
                 /*we are being moved to ourself*/
                 return *this;
             }
-            delete[] data;
+            delete[] _data;
             width = lhs.width;
             height = lhs.height;
-            data = lhs.data;
-            lhs.data = nullptr;
+            _data = lhs._data;
+            lhs._data = nullptr;
             lhs.width = 0;
             lhs.height = 0;
         }
@@ -72,34 +72,34 @@ namespace containers {
         }
 
         T *begin() { // first element
-            return data;
+            return _data;
         }
 
         T *end() { // past the end pointer
-            return data + height * width;
+            return _data + height * width;
         }
 
         const T *begin() const { // first element
-            return (T *) data;
+            return (T *) _data;
         }
 
         const T *end() const { // past the end pointer
-            return data + height * width;
+            return _data + height * width;
         }
 
         const T *cbegin() const { // first element
-            return (T *) data;
+            return (T *) _data;
         }
 
         const T *cend() const { // past the end pointer
-            return data + height * width;
+            return _data + height * width;
         }
 
         T &operator()(const std::size_t x, const std::size_t y) {
             if (x >= width || y >= height) {
                 throw std::out_of_range("out of range");
             }
-            return data[y * width + x];
+            return _data[y * width + x];
         }
 
         const T &operator()(const std::size_t x, const std::size_t y) const {
@@ -107,21 +107,21 @@ namespace containers {
                 throw std::out_of_range("out of range");
             }
 
-            return data[x * height + y];
+            return _data[x * height + y];
         }
 
         T &operator()(std::size_t z) {
             if (z >= (width * height)) {
                 throw std::out_of_range("out of range");
             }
-            return data[z];
+            return _data[z];
         }
 
         const T &operator()(std::size_t z) const {
             if (z >= (width * height)) {
                 throw std::out_of_range("out of range");
             }
-            return data[z];
+            return _data[z];
         }
 
         std::size_t z_to_x(std::size_t z) { return z / height; };

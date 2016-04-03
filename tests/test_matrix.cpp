@@ -5,7 +5,7 @@
 #include "../lib/matrix.h"
 #include "../lib/debug.h"
 
-int main(int argc, char const *argv[]) {
+int main() {
     using containers::matrix;
     {
 
@@ -24,16 +24,16 @@ int main(int argc, char const *argv[]) {
     }
     {
         /*test matrix element operations*/
-        std::size_t x = 20;
-        std::size_t y = 20;
+        long x = 20;
+        long y = 20;
         /*test array element-wise operations*/
         matrix<long> test_array_1(x, y, 0);
         matrix<long> test_array_2(x, y, 0);
         matrix<long> test_array_3(x, y, 0);
         matrix<long> test_array_4(x, y, 0);
         matrix<long> test_array_5(x, y, 0);
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
+        for (long i = 0; i < x; i++) {
+            for (long j = 0; j < y; j++) {
                 test_array_1(i, j) = i * j - i;
                 test_array_2(i, j) = i * j - i;
                 test_array_3(i, j) = i * j - i;
@@ -47,8 +47,8 @@ int main(int argc, char const *argv[]) {
         test_array_4 -= 4;
         test_array_5 %= 4;
 
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
+        for (long i = 0; i < x; i++) {
+            for (long j = 0; j < y; j++) {
                 assert(test_array_1(i, j) == (i * j - i) * 4);
                 assert(test_array_2(i, j) == (i * j - i) / 4);
                 assert(test_array_3(i, j) == (i * j - i) + 4);
@@ -59,7 +59,7 @@ int main(int argc, char const *argv[]) {
     }
     {
         /*test row-major order*/
-        /*           x = 0    1    2    3 */
+        /*           x = 0   1   2   3 */
         int values[] = {
                 /*y=0*/ 11, 21, 31, 41,
                 /*y=1*/ 12, 22, 32, 42,
@@ -72,8 +72,8 @@ int main(int argc, char const *argv[]) {
 //            debug_log(i);
             test_data(i) = values[i];
         }
-        for (size_t x = 0; x < 4; x++) {
-            for (size_t y = 0; y < 5; y++) {
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 5; y++) {
                 test(test_data(x, y) == 10 * (x + 1) + (y + 1), "ordering");
                 /*test debugging code*/
 //                std::cout << "test_data(" << x << "," << y << ") = " <<
@@ -89,15 +89,15 @@ int main(int argc, char const *argv[]) {
     }
     {
         /*equality operators*/
-        matrix<int> mat1(3,3);
-        matrix<int> mat2(3,3);
-        matrix<int> mat3(3,3);
-        matrix<int> mat4(3,8);
-        for (int i=0; i<9; i++) {
-            mat1(i) = i*i;
-            mat2(i) = i*i;
-            mat3(i) = i*i;
-            mat4(i) = i*i;
+        matrix<int> mat1(3, 3);
+        matrix<int> mat2(3, 3);
+        matrix<int> mat3(3, 3);
+        matrix<int> mat4(3, 8);
+        for (int i = 0; i < 9; i++) {
+            mat1((size_t) i) = i * i;
+            mat2((size_t) i) = i * i;
+            mat3((size_t) i) = i * i;
+            mat4((size_t) i) = i * i;
         }
         mat3(3) = 0;
         test(mat1 == mat2, "equality");
