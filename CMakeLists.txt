@@ -2,8 +2,11 @@ cmake_minimum_required(VERSION 3.3)
 project(containers)
 
 # for using clang
-set(CMAKE_C_COMPILER   "/usr/bin/clang")
-set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+#set(CMAKE_C_COMPILER   "/usr/bin/clang")
+#set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ilib/")
+include_directories(lib/)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++14")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
@@ -24,6 +27,11 @@ add_executable(test_dynamic_array
 add_executable(test_matrix
         tests/test_matrix.cpp
         lib/matrix.h
+        )
+
+add_executable(test_vect
+        tests/test_vect.cpp
+        lib/vect.h
         )
 
 add_executable(test_thread_pool
