@@ -27,11 +27,6 @@ namespace containers {
     }
 
     template<typename U>
-    bool operator!=(const vect<T, dim> &rhs) {
-      return !operator==(rhs);
-    }
-
-    template<typename U>
     vect<T, dim> &operator+=(const U &rhs) {
       for (auto &x : *this) {
         x += rhs;
