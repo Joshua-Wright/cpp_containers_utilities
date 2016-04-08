@@ -10,7 +10,7 @@ include_directories(lib/)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++14")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread -fopenmp")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1")
@@ -60,3 +60,6 @@ add_executable(test_array_list tests/test_array_list.cpp lib/array_list.h)
 add_executable(test_debug tests/test_debug.cpp)
 
 add_executable(test_arg_parser tests/test_arg_parser.cpp lib/arg_parser.cpp lib/arg_parser.h)
+
+add_executable(test_mergesort tests/test_mergesort.cpp)
+add_executable(test_quicksort "tests/test_quicksort .cpp")
