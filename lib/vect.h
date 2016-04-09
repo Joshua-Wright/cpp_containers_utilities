@@ -24,6 +24,11 @@ namespace containers {
 
     vect() : array() { }
 
+    template<typename U>
+    vect(const vect<U, dim> &rhs) {
+      std::copy(rhs.begin(), rhs.end(), begin());
+    }
+
     vect(const std::initializer_list<T> &list) : array() {
       if (list.size() != dim) {
         throw std::logic_error("Bad array initializer size!");
@@ -75,6 +80,12 @@ namespace containers {
 
     T norm() { return std::sqrt(norm2()); }
 
+    /*TODO: average*/
+    T avg() {
+      return std::accumulate(begin(), end(), T(), [](const T &cur, const T &b) {
+        return cur + b;
+      }) / dim;
+    };
 
 
     /*TODO: vector-to-vector element-wise operators*/
@@ -86,14 +97,49 @@ namespace containers {
       }
       return out;
     }
-    /*TODO: - */
-    /*TODO: * */
-    /*TODO: / */
-    /*TODO: % */
 
+    vect<T, dim> operator-(const vect<T, dim> &rhs) {
+      vect<T, dim> out;
+      for (auto i1 = begin(), i2 = rhs.begin(), o1 = out.begin();
+           o1 < out.end(); ++i1, ++i2, ++o1) {
+        *o1 = *i1 - *i2;
+      }
+      return out;
+    }
 
+    vect<T, dim> operator*(const vect<T, dim> &rhs) {
+      vect<T, dim> out;
+      for (auto i1 = begin(), i2 = rhs.begin(), o1 = out.begin();
+           o1 < out.end(); ++i1, ++i2, ++o1) {
+        *o1 = *i1 * *i2;
+      }
+      return out;
+    }
 
-    /*TODO: C-style cast to other vect<U,dim> type*/
+    vect<T, dim> operator/(const vect<T, dim> &rhs) {
+      vect<T, dim> out;
+      for (auto i1 = begin(), i2 = rhs.begin(), o1 = out.begin();
+           o1 < out.end(); ++i1, ++i2, ++o1) {
+        *o1 = *i1 / *i2;
+      }
+      return out;
+    }
+
+    vect<T, dim> operator%(const vect<T, dim> &rhs) {
+      vect<T, dim> out;
+      for (auto i1 = begin(), i2 = rhs.begin(), o1 = out.begin();
+           o1 < out.end(); ++i1, ++i2, ++o1) {
+        *o1 = *i1 % *i2;
+      }
+      return out;
+    }
+
+    template<typename U>
+    operator vect<U, dim>() const {
+      vect<U, dim> out = *this;
+      return out;
+    };
+
 
   };
 
@@ -163,7 +209,6 @@ namespace containers {
   }
 
 }
-
 
 
 #endif //CONTAINERS_VECT_H
