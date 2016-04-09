@@ -3,13 +3,14 @@
 #include "vect.h"
 #include "debug.h"
 
-int main(int argc, char const *argv[]) {
+int main() {
   using namespace containers;
 
   {/*element access*/
     vect<int, 5> vect1{1, 2, 3, 4, 5};
     vect<int, 3> vect2 = {1, 2, 3};
     vect<int, 5> vect3;
+    vect<int, 5> vect4(5);
     test(vect2[0] == 1, "element access");
     test(vect2[1] == 2, "element access");
     test(vect2[2] == 3, "element access");
@@ -17,6 +18,8 @@ int main(int argc, char const *argv[]) {
     test(vect2[1] == 9, "element access");
     test(std::all_of(vect3.begin(), vect3.end(), [](int a) { return a == 0; }),
          "default constructor");
+    test(std::all_of(vect4.begin(), vect4.end(), [](int a) { return a == 5; }),
+         "filer constructor");
   }
   {/*equality*/
     vect<int, 5> vect1{1, 2, 3, 4, 5};
@@ -108,8 +111,10 @@ int main(int argc, char const *argv[]) {
   }
   {/*pow*/
     vect<double, 3> v1{1, 2, 3};
+    vect<double, 3> o2{1, 2, 3};
     vect<double, 3> o1{1, 4, 9};
     test(v1.pow(2) == o1, "pow");
+    test(v1 == o2, "pow");
   }
   {/*avg*/
     vect<double, 3> v1{1, 2, 3};
@@ -123,6 +128,28 @@ int main(int argc, char const *argv[]) {
     test(v2[2] == 1, "typecast on constructor");
     vect<double, 3> out1{1, 2.123 * 2, 1.5};
     test(v1 * v2 == out1, "typecast");
+  }
+  {/*cross product 3d*/
+    vect<int, 3> in1{1, 2, 3};
+    vect<int, 3> in2{9, 8, 7};
+    vect<int, 3> out1{-10, 20, -10};
+    vect<int, 3> zero(0);
+    test(crossP(in1, in2) == out1, "cross product");
+    test(crossP(in2, in1) == -1 * out1, "cross product");
+    test(crossP(in1, in2) == -1 * crossP(in2, in1), "cross product");
+    test(crossP(in2, in2) == zero, "cross product");
+    test(crossP(in1, in1) == zero, "cross product");
+  }
+  {/*cross product 3d*/
+    vect<int, 2> in1{1, 2};
+    vect<int, 2> in2{9, 8};
+    vect<int, 3> out1{0, 0, -10};
+    vect<int, 3> zero(0);
+    test(crossP(in1, in2) == out1, "cross product");
+    test(crossP(in2, in1) == -1 * out1, "cross product");
+    test(crossP(in1, in2) == -1 * crossP(in2, in1), "cross product");
+    test(crossP(in2, in2) == zero, "cross product");
+    test(crossP(in1, in1) == zero, "cross product");
   }
 
   return 0;

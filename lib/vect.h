@@ -20,9 +20,12 @@ namespace containers {
     using array::end;
     using array::cbegin;
     using array::cend;
+
   public:
 
     vect() : array() { }
+
+    vect(const T &val) : array() { std::fill(begin(), end(), val); }
 
     template<typename U>
     vect(const vect<U, dim> &rhs) {
@@ -35,6 +38,7 @@ namespace containers {
       }
       std::copy(list.begin(), list.end(), begin());
     }
+
 
     vect<T, dim> &operator+=(const T &rhs) {
       std::transform(begin(), end(), begin(),
@@ -66,30 +70,32 @@ namespace containers {
       return *this;
     };
 
-    vect<T, dim> &pow(const T &rhs) {
-      std::transform(begin(), end(), begin(),
+    vect<T, dim> pow(const T &rhs) const {
+      vect<T, dim> out;
+      std::transform(begin(), end(), out.begin(),
                      [&rhs](const T &a) { return std::pow(a, rhs); });
-      return *this;
+      return out;
     };
 
-    T norm2() {
+
+    T norm2() const {
       return std::accumulate(begin(), end(), T(), [](const T &cur, const T &b) {
         return cur + b * b;
       });
     };
 
-    T norm() { return std::sqrt(norm2()); }
+    T norm() const { return std::sqrt(norm2()); }
 
-    /*TODO: average*/
-    T avg() {
+    vect<T, dim> unitV() const { return (*this) / norm(); };
+
+    T avg() const {
       return std::accumulate(begin(), end(), T(), [](const T &cur, const T &b) {
         return cur + b;
       }) / dim;
     };
 
 
-    /*TODO: vector-to-vector element-wise operators*/
-    vect<T, dim> operator+(const vect<T, dim> &rhs) {
+    vect<T, dim> operator+(const vect<T, dim> &rhs) const {
       vect<T, dim> out;
       for (auto i1 = begin(), i2 = rhs.begin(), o1 = out.begin();
            o1 < out.end(); ++i1, ++i2, ++o1) {
@@ -98,7 +104,7 @@ namespace containers {
       return out;
     }
 
-    vect<T, dim> operator-(const vect<T, dim> &rhs) {
+    vect<T, dim> operator-(const vect<T, dim> &rhs) const {
       vect<T, dim> out;
       for (auto i1 = begin(), i2 = rhs.begin(), o1 = out.begin();
            o1 < out.end(); ++i1, ++i2, ++o1) {
@@ -107,7 +113,7 @@ namespace containers {
       return out;
     }
 
-    vect<T, dim> operator*(const vect<T, dim> &rhs) {
+    vect<T, dim> operator*(const vect<T, dim> &rhs) const {
       vect<T, dim> out;
       for (auto i1 = begin(), i2 = rhs.begin(), o1 = out.begin();
            o1 < out.end(); ++i1, ++i2, ++o1) {
@@ -116,7 +122,7 @@ namespace containers {
       return out;
     }
 
-    vect<T, dim> operator/(const vect<T, dim> &rhs) {
+    vect<T, dim> operator/(const vect<T, dim> &rhs) const {
       vect<T, dim> out;
       for (auto i1 = begin(), i2 = rhs.begin(), o1 = out.begin();
            o1 < out.end(); ++i1, ++i2, ++o1) {
@@ -125,7 +131,7 @@ namespace containers {
       return out;
     }
 
-    vect<T, dim> operator%(const vect<T, dim> &rhs) {
+    vect<T, dim> operator%(const vect<T, dim> &rhs) const {
       vect<T, dim> out;
       for (auto i1 = begin(), i2 = rhs.begin(), o1 = out.begin();
            o1 < out.end(); ++i1, ++i2, ++o1) {
@@ -139,7 +145,6 @@ namespace containers {
       vect<U, dim> out = *this;
       return out;
     };
-
 
   };
 
@@ -207,6 +212,24 @@ namespace containers {
                    [&rhs](const T &a) { return rhs / a; });
     return out;
   }
+
+  template<typename T>
+  vect<T, 3> crossP(const vect<T, 3> &u, const vect<T, 3> &v) {
+    vect<T, 3> out;
+    out[0] = u[1] * v[2] - u[2] * v[1];
+    out[1] = u[2] * v[0] - u[0] * v[2];
+    out[2] = u[0] * v[1] - u[1] * v[0];
+    return out;
+  };
+
+  template<typename T>
+  vect<T, 3> crossP(const vect<T, 2> &u, const vect<T, 2> &v) {
+    vect<T, 3> out;
+    out[0] = 0;
+    out[1] = 0;
+    out[2] = u[0] * v[1] - u[1] * v[0];
+    return out;
+  };
 
 }
 
