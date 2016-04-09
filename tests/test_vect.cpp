@@ -7,19 +7,17 @@ int main(int argc, char const *argv[]) {
   using namespace containers;
 
   {
-    /*constructor*/
-    vect<int, 3> test1;
-    vect<int, 5> vect2{1, 2, 3, 4, 5};
-    vect<int, 5> vect3 = {1, 2, 3, 4, 5};
-  }
-  {
     /*element access*/
+    vect<int, 5> vect1{1, 2, 3, 4, 5};
     vect<int, 3> vect2 = {1, 2, 3};
+    vect<int, 5> vect3;
     test(vect2[0] == 1, "element access");
     test(vect2[1] == 2, "element access");
     test(vect2[2] == 3, "element access");
     vect2[1] = 9;
     test(vect2[1] == 9, "element access");
+    test(std::all_of(vect3.begin(), vect3.end(), [](int a) { return a == 0; }),
+         "default constructor");
   }
   {
     /*equality*/
@@ -78,10 +76,34 @@ int main(int argc, char const *argv[]) {
     /*and reverse*/
     test(out1 == 5 + vect1a, "+");
     test(out3 == 5 * vect1a, "*");
-    vect<int, 5> out6{9,8,7,6,5};
+    vect<int, 5> out6{9, 8, 7, 6, 5};
     vect<int, 5> out7{100, 50, 33, 25, 20};
     test(out6 == 10 - vect1a, "-");
     test(out7 == 100 / vect1a, "/");
+  }
+  {
+    /*vector to vector operations*/
+    vect<int, 5> vect1a{1, 2, 3, 4, 5};
+    vect<int, 5> vect1b{10, 9, 8, 7, 6};
+    vect<int, 5> out1{11, 11, 11, 11, 11};
+    vect<int, 5> out2{};
+    vect<int, 5> out3{};
+    vect<int, 5> out4{};
+    vect<int, 5> out5{};
+    vect<int, 5> test = vect1a + vect1b;
+    test(vect1a + vect1b == out1, "+");
+  }
+  {
+    /*norm*/
+    vect<double, 3> v1{1, 2, 3};
+    test(v1.norm2() == 1 + 2 * 2 + 3 * 3, "norm");
+    test(v1.norm() == std::sqrt(1 + 2 * 2 + 3 * 3), "norm");
+  }
+  {
+    /*pow*/
+    vect<double, 3> v1{1, 2, 3};
+    vect<double, 3> o1{1, 4, 9};
+    test(v1.pow(2) == o1, "pow");
   }
 
   return 0;
