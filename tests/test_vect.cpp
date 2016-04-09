@@ -59,6 +59,29 @@ int main() {
     test(vect1d == r4, "/=");
     test(vect1e == r5, "%=");
   }
+  {/*compound assignment operators for vectors*/
+    vect<int, 5> vect0{1, 2, 3, 4, 5};
+    vect<int, 5> vect1a{1, 2, 3, 4, 5};
+    vect<int, 5> vect1b{1, 2, 3, 4, 5};
+    vect<int, 5> vect1c{1, 2, 3, 4, 5};
+    vect<int, 5> vect1d{1, 2, 3, 4, 5};
+    vect<int, 5> vect1e{1, 2, 3, 4, 5};
+    vect1a += vect0;
+    vect1b -= vect0;
+    vect1c *= vect0;
+    vect1d /= vect0;
+    vect1e %= vect0;
+    vect<int, 5> r1{2, 4, 6, 8, 10};
+    vect<int, 5> r2{0,0,0,0,0};
+    vect<int, 5> r3{1,4,9,16,25};
+    vect<int, 5> r4{1,1,1,1,1};
+    vect<int, 5> r5{0,0,0,0,0};
+    test(vect1a == r1, "+=");
+    test(vect1b == r2, "-=");
+    test(vect1c == r3, "*=");
+    test(vect1d == r4, "/=");
+    test(vect1e == r5, "%=");
+  }
   {/*infix operators*/
     vect<int, 5> vect1a{1, 2, 3, 4, 5};
     vect<int, 5> out1{6, 7, 8, 9, 10};

@@ -40,6 +40,7 @@ namespace containers {
     }
 
 
+    /*scalars*/
     vect<T, dim> &operator+=(const T &rhs) {
       std::transform(begin(), end(), begin(),
                      [&rhs](const T &a) { return a + rhs; });
@@ -70,13 +71,79 @@ namespace containers {
       return *this;
     };
 
+    /*vectors*/
+    vect<T, dim> operator+=(const vect<T, dim> &rhs) {
+      for (auto i1 = begin(), i2 = rhs.begin(); i1 < end(); ++i1, ++i2) {
+        (*i1) += (*i2);
+      }
+      return *this;
+    }
+
+    vect<T, dim> operator-=(const vect<T, dim> &rhs) {
+      for (auto i1 = begin(), i2 = rhs.begin(); i1 < end(); ++i1, ++i2) {
+        *i1 -= *i2;
+      }
+      return *this;
+    }
+
+    vect<T, dim> operator*=(const vect<T, dim> &rhs) {
+      for (auto i1 = begin(), i2 = rhs.begin(); i1 < end(); ++i1, ++i2) {
+        *i1 *= *i2;
+      }
+      return *this;
+    }
+
+    vect<T, dim> operator/=(const vect<T, dim> &rhs) {
+      for (auto i1 = begin(), i2 = rhs.begin(); i1 < end(); ++i1, ++i2) {
+        *i1 /= *i2;
+      }
+      return *this;
+    }
+
+    vect<T, dim> operator%=(const vect<T, dim> &rhs) {
+      for (auto i1 = begin(), i2 = rhs.begin(); i1 < end(); ++i1, ++i2) {
+        *i1 %= *i2;
+      }
+      return *this;
+    }
+
+    vect<T, dim> operator+(const vect<T, dim> &rhs) const {
+      vect<T, dim> out(*this);
+      out += rhs;
+      return out;
+    }
+
+    vect<T, dim> operator-(const vect<T, dim> &rhs) const {
+      vect<T, dim> out(*this);
+      out -= rhs;
+      return out;
+    }
+
+    vect<T, dim> operator*(const vect<T, dim> &rhs) const {
+      vect<T, dim> out(*this);
+      out *= rhs;
+      return out;
+    }
+
+    vect<T, dim> operator/(const vect<T, dim> &rhs) const {
+      vect<T, dim> out(*this);
+      out /= rhs;
+      return out;
+    }
+
+    vect<T, dim> operator%(const vect<T, dim> &rhs) const {
+      vect<T, dim> out(*this);
+      out %= rhs;
+      return out;
+    }
+
+
     vect<T, dim> pow(const T &rhs) const {
       vect<T, dim> out;
       std::transform(begin(), end(), out.begin(),
                      [&rhs](const T &a) { return std::pow(a, rhs); });
       return out;
     };
-
 
     T norm2() const {
       return std::accumulate(begin(), end(), T(), [](const T &cur, const T &b) {
@@ -101,52 +168,6 @@ namespace containers {
     T dist2(const vect<T, dim> &rhs) const { return (rhs - *this).norm2(); }
 
     T dist(const vect<T, dim> &rhs) const { return std::sqrt(dist2(rhs)); }
-
-
-    vect<T, dim> operator+(const vect<T, dim> &rhs) const {
-      vect<T, dim> out;
-      for (auto i1 = begin(), i2 = rhs.begin(), o1 = out.begin();
-           o1 < out.end(); ++i1, ++i2, ++o1) {
-        *o1 = *i1 + *i2;
-      }
-      return out;
-    }
-
-    vect<T, dim> operator-(const vect<T, dim> &rhs) const {
-      vect<T, dim> out;
-      for (auto i1 = begin(), i2 = rhs.begin(), o1 = out.begin();
-           o1 < out.end(); ++i1, ++i2, ++o1) {
-        *o1 = *i1 - *i2;
-      }
-      return out;
-    }
-
-    vect<T, dim> operator*(const vect<T, dim> &rhs) const {
-      vect<T, dim> out;
-      for (auto i1 = begin(), i2 = rhs.begin(), o1 = out.begin();
-           o1 < out.end(); ++i1, ++i2, ++o1) {
-        *o1 = *i1 * *i2;
-      }
-      return out;
-    }
-
-    vect<T, dim> operator/(const vect<T, dim> &rhs) const {
-      vect<T, dim> out;
-      for (auto i1 = begin(), i2 = rhs.begin(), o1 = out.begin();
-           o1 < out.end(); ++i1, ++i2, ++o1) {
-        *o1 = *i1 / *i2;
-      }
-      return out;
-    }
-
-    vect<T, dim> operator%(const vect<T, dim> &rhs) const {
-      vect<T, dim> out;
-      for (auto i1 = begin(), i2 = rhs.begin(), o1 = out.begin();
-           o1 < out.end(); ++i1, ++i2, ++o1) {
-        *o1 = *i1 % *i2;
-      }
-      return out;
-    }
 
     template<typename U>
     operator vect<U, dim>() const {
