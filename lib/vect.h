@@ -88,11 +88,19 @@ namespace containers {
 
     vect<T, dim> unitV() const { return (*this) / norm(); };
 
-    T avg() const {
+    T sum() const {
       return std::accumulate(begin(), end(), T(), [](const T &cur, const T &b) {
         return cur + b;
-      }) / dim;
+      });
+    }
+
+    T avg() const {
+      return sum() / dim;
     };
+
+    T dist2(const vect<T, dim> &rhs) const { return (rhs - *this).norm2(); }
+
+    T dist(const vect<T, dim> &rhs) const { return std::sqrt(dist2(rhs)); }
 
 
     vect<T, dim> operator+(const vect<T, dim> &rhs) const {

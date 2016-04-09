@@ -151,6 +151,11 @@ int main() {
     test(crossP(in2, in2) == zero, "cross product");
     test(crossP(in1, in1) == zero, "cross product");
   }
+  {/*distance*/
+    vect<double, 3> in1{1, 8, 2};
+    vect<double, 3> in2{1, 7, 2};
+    test(in1.dist(in2) == 1, "distance");
+  }
 
   return 0;
 }
