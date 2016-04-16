@@ -72,10 +72,10 @@ int main() {
     vect1d /= vect0;
     vect1e %= vect0;
     vect<int, 5> r1{2, 4, 6, 8, 10};
-    vect<int, 5> r2{0,0,0,0,0};
-    vect<int, 5> r3{1,4,9,16,25};
-    vect<int, 5> r4{1,1,1,1,1};
-    vect<int, 5> r5{0,0,0,0,0};
+    vect<int, 5> r2{0, 0, 0, 0, 0};
+    vect<int, 5> r3{1, 4, 9, 16, 25};
+    vect<int, 5> r4{1, 1, 1, 1, 1};
+    vect<int, 5> r5{0, 0, 0, 0, 0};
     test(vect1a == r1, "+=");
     test(vect1b == r2, "-=");
     test(vect1c == r3, "*=");
@@ -178,6 +178,42 @@ int main() {
     vect<double, 3> in1{1, 8, 2};
     vect<double, 3> in2{1, 7, 2};
     test(in1.dist(in2) == 1, "distance");
+  }
+
+  {/*test memory layout*/
+    struct test_mem {
+      size_t a;
+      size_t b;
+      size_t c;
+      size_t d;
+    };
+
+    size_t test_values[] = {1, 45, 32, 45};
+    size_t *vals = new size_t[4];
+    std::copy_n((size_t *) &test_values, 4, vals);
+    vect<size_t, 4> vect1a = *reinterpret_cast<vect<size_t, 4> *>(vals);
+    vect<size_t, 4> vect1b(vals);
+
+    test_mem test_mem1;
+    test_mem1.a = test_values[0];
+    test_mem1.b = test_values[1];
+    test_mem1.c = test_values[2];
+    test_mem1.d = test_values[3];
+    vect<size_t, 4> vect2a = *reinterpret_cast<vect<size_t, 4> *>(&test_mem1);
+    vect<size_t, 4> vect2b(reinterpret_cast<size_t*>(&test_mem1));
+
+    /*these don't work*/
+//    vect<size_t, 4> vect3 = reinterpret_cast<vect<size_t, 4>>(test_mem1);
+//    vect<size_t, 4> vect4 = (vect<size_t, 4>)(test_mem1);
+
+    for (int i = 0; i < 4; i++) {
+      test(vals[i] == vect1a[i], "reinterpret cast");
+      test(vals[i] == vect1b[i], "reinterpret cast");
+      test(vals[i] == vect2a[i], "reinterpret cast");
+      test(vals[i] == vect2b[i], "reinterpret cast");
+    }
+
+
   }
 
   return 0;

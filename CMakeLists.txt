@@ -16,7 +16,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffast-math")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffast-math")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lquadmath")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lginac -lcln") # for ginac
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lboost_timer -lboost_system")
 
@@ -62,4 +63,5 @@ add_executable(test_debug tests/test_debug.cpp)
 add_executable(test_arg_parser tests/test_arg_parser.cpp lib/arg_parser.cpp lib/arg_parser.h)
 
 add_executable(test_mergesort tests/test_mergesort.cpp)
-add_executable(test_quicksort "tests/benchmark_sorts.cpp")
+add_executable(benchmark_sorts "tests/benchmark_sorts.cpp")
+add_executable(test_parallel_pi_speed "tests/test_pi_speed_parallel_integration.cpp")

@@ -32,6 +32,10 @@ namespace containers {
       std::copy(rhs.begin(), rhs.end(), begin());
     }
 
+    vect(const T* data) {
+      std::copy_n(data, dim, begin());
+    }
+
     vect(const std::initializer_list<T> &list) : array() {
       if (list.size() != dim) {
         throw std::logic_error("Bad array initializer size!");
