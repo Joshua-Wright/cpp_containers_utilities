@@ -143,8 +143,7 @@ namespace containers {
       if (x >= width || y >= height) {
         throw std::out_of_range("out of range");
       }
-
-      return _data[x * height + y];
+      return _data[y * width + x];
     }
 
     T &operator()(std::size_t z) {
