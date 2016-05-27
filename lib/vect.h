@@ -8,7 +8,7 @@
 #include <cmath>
 #include <array>
 #include <algorithm>
-
+#include <numeric> // for accumulate
 
 namespace containers {
 
