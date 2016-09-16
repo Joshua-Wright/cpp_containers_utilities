@@ -8,6 +8,15 @@
 namespace containers {
 
   template<typename T>
+  class matrix;
+
+  template<typename T, typename U>
+  bool dimensions_equal(const matrix<T> &a, const matrix<U> &b);
+
+  template<typename T, typename U>
+  void assert_same_size(const matrix<T> &a, const matrix<U> &b);
+
+  template<typename T>
   class matrix {
     std::size_t width, height;
     T *_data;
@@ -50,7 +59,7 @@ namespace containers {
       }
     }
 
-    matrix &operator=(const matrix<T> &lhs) {
+    matrix<T> &operator=(const matrix<T> &lhs) {
       if (&lhs == this) {
         /*we are being assigned to ourself*/
         return *this;
@@ -74,11 +83,9 @@ namespace containers {
       lhs.height = 0;
     }
 
-    matrix<T> operator=(matrix<T> &&lhs) {
-      if (&lhs == this) {
-        /*we are being moved to ourself*/
-        return *this;
-      }
+    matrix<T> &operator=(matrix<T> &&lhs) {
+      // this is an lvalue, and the argument is an rvalue
+      // therefore being assigned to ourself is somewhat nonsensical
       delete[] _data;
       width = lhs.width;
       height = lhs.height;
@@ -86,6 +93,7 @@ namespace containers {
       lhs._data = nullptr;
       lhs.width = 0;
       lhs.height = 0;
+      return *this;
     }
 
     template<typename U>
@@ -258,14 +266,14 @@ namespace containers {
   template<typename T, typename U>
   bool dimensions_equal(const matrix<T> &a, const matrix<U> &b) {
     return (a.x() == b.x()) && (a.y() == b.y());
-  };
+  }
 
   template<typename T, typename U>
   void assert_same_size(const matrix<T> &a, const matrix<U> &b) {
     if (!dimensions_equal(a, b)) {
       throw std::invalid_argument("Dimensions must match!");
     }
-  };
+  }
 
 }
 
