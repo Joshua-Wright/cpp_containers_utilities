@@ -10,7 +10,6 @@ namespace containers {
                  const Compare comp = Compare(), const size_t threshold = 32) {
     typedef typename RAIter::value_type value_type;
     using std::swap;
-    using std::partition;
 
     const size_t datasize = last - first;
 
