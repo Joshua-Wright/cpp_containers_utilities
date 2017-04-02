@@ -1,12 +1,13 @@
 // (c) Copyright 2015 Josh Wright
 
-#include "vect.h"
-#include "debug.h"
+#include "testing.h"
+#include "util/debug.h"
+#include "util/vect.h"
 
 int main() {
-  using namespace containers;
+  using namespace util;
 
-  {/*element access*/
+  { /*element access*/
     vect<int, 5> vect1{1, 2, 3, 4, 5};
     vect<int, 3> vect2 = {1, 2, 3};
     vect<int, 5> vect3;
@@ -21,7 +22,7 @@ int main() {
     test(std::all_of(vect4.begin(), vect4.end(), [](int a) { return a == 5; }),
          "filer constructor");
   }
-  {/*equality*/
+  { /*equality*/
     vect<int, 5> vect1{1, 2, 3, 4, 5};
     vect<int, 5> vect2{1, 2, 3, 4, 5};
     vect<int, 5> vect3{1, 2, 3, 4, 9};
@@ -37,7 +38,7 @@ int main() {
     vect1 = vect2;
     test(vect1 == vect2, "copy assignment");
   }
-  {/*compound assignment operators*/
+  { /*compound assignment operators*/
     vect<int, 5> vect1a{1, 2, 3, 4, 5};
     vect<int, 5> vect1b{1, 2, 3, 4, 5};
     vect<int, 5> vect1c{1, 2, 3, 4, 5};
@@ -59,7 +60,7 @@ int main() {
     test(vect1d == r4, "/=");
     test(vect1e == r5, "%=");
   }
-  {/*compound assignment operators for vectors*/
+  { /*compound assignment operators for vectors*/
     vect<int, 5> vect0{1, 2, 3, 4, 5};
     vect<int, 5> vect1a{1, 2, 3, 4, 5};
     vect<int, 5> vect1b{1, 2, 3, 4, 5};
@@ -82,7 +83,7 @@ int main() {
     test(vect1d == r4, "/=");
     test(vect1e == r5, "%=");
   }
-  {/*infix operators*/
+  { /*infix operators*/
     vect<int, 5> vect1a{1, 2, 3, 4, 5};
     vect<int, 5> out1{6, 7, 8, 9, 10};
     vect<int, 5> out2{-4, -3, -2, -1, 0};
@@ -103,19 +104,19 @@ int main() {
     test(out6 == 10 - vect1a, "-");
     test(out7 == 100 / vect1a, "/");
   }
-  {/*vector to vector operations*/
+  { /*vector to vector operations*/
     vect<int, 5> vect1a{1, 2, 3, 4, 5};
     vect<int, 5> vect1b{10, 9, 8, 7, 6};
-    vect<int, 5> out1{11, 11, 11, 11, 11};/*+*/
-    vect<int, 5> out2a{-9, -7, -5, -3, -1};/*-*/
-    vect<int, 5> out2b{9, 7, 5, 3, 1};/*-*/
-    vect<int, 5> out3{10, 18, 24, 28, 30};/***/
-    vect<int, 5> out4a{0, 0, 0, 0, 0};/*/*/
-    vect<int, 5> out4b{10, 4, 2, 1, 1};/*/*/
-    vect<int, 5> out5a{1, 2, 3, 4, 5};/*%*/
-    vect<int, 5> out5b{0, 1, 2, 3, 1};/*%*/
-    vect<int, 5> zero{0, 0, 0, 0, 0};/*-*/
-    vect<int, 5> one{1, 1, 1, 1, 1};/*-*/
+    vect<int, 5> out1{11, 11, 11, 11, 11};  /*+*/
+    vect<int, 5> out2a{-9, -7, -5, -3, -1}; /*-*/
+    vect<int, 5> out2b{9, 7, 5, 3, 1};      /*-*/
+    vect<int, 5> out3{10, 18, 24, 28, 30};  /***/
+    vect<int, 5> out4a{0, 0, 0, 0, 0};      /*/*/
+    vect<int, 5> out4b{10, 4, 2, 1, 1};     /*/*/
+    vect<int, 5> out5a{1, 2, 3, 4, 5};      /*%*/
+    vect<int, 5> out5b{0, 1, 2, 3, 1};      /*%*/
+    vect<int, 5> zero{0, 0, 0, 0, 0};       /*-*/
+    vect<int, 5> one{1, 1, 1, 1, 1};        /*-*/
     test(vect1a + vect1b == out1, "+");
     test(vect1a - vect1b == out2a, "-");
     test(vect1b - vect1a == out2b, "-");
@@ -127,23 +128,23 @@ int main() {
     test(vect1b - vect1b == zero, "%");
     test(vect1b / vect1b == one, "%");
   }
-  {/*norm*/
+  { /*norm*/
     vect<double, 3> v1{1, 2, 3};
     test(v1.norm2() == 1 + 2 * 2 + 3 * 3, "norm");
     test(v1.norm() == std::sqrt(1 + 2 * 2 + 3 * 3), "norm");
   }
-  {/*pow*/
+  { /*pow*/
     vect<double, 3> v1{1, 2, 3};
     vect<double, 3> o2{1, 2, 3};
     vect<double, 3> o1{1, 4, 9};
     test(v1.pow(2) == o1, "pow");
     test(v1 == o2, "pow");
   }
-  {/*avg*/
+  { /*avg*/
     vect<double, 3> v1{1, 2, 3};
     test(v1.avg() == 2, "avg");
   }
-  {/*typecast*/
+  { /*typecast*/
     vect<double, 3> v1{1, 2.123, 3.0 / 2};
     vect<int, 3> v2 = v1;
     test(v2[0] == 1, "typecast on constructor");
@@ -152,7 +153,7 @@ int main() {
     vect<double, 3> out1{1, 2.123 * 2, 1.5};
     test(v1 * v2 == out1, "typecast");
   }
-  {/*cross product 3d*/
+  { /*cross product 3d*/
     vect<int, 3> in1{1, 2, 3};
     vect<int, 3> in2{9, 8, 7};
     vect<int, 3> out1{-10, 20, -10};
@@ -163,7 +164,7 @@ int main() {
     test(crossP(in2, in2) == zero, "cross product");
     test(crossP(in1, in1) == zero, "cross product");
   }
-  {/*cross product 3d*/
+  { /*cross product 3d*/
     vect<int, 2> in1{1, 2};
     vect<int, 2> in2{9, 8};
     vect<int, 3> out1{0, 0, -10};
@@ -174,13 +175,13 @@ int main() {
     test(crossP(in2, in2) == zero, "cross product");
     test(crossP(in1, in1) == zero, "cross product");
   }
-  {/*distance*/
+  { /*distance*/
     vect<double, 3> in1{1, 8, 2};
     vect<double, 3> in2{1, 7, 2};
     test(in1.dist(in2) == 1, "distance");
   }
 
-  {/*test memory layout*/
+  { /*test memory layout*/
     struct test_mem {
       size_t a;
       size_t b;
@@ -190,7 +191,7 @@ int main() {
 
     size_t test_values[] = {1, 45, 32, 45};
     size_t *vals = new size_t[4];
-    std::copy_n((size_t *) &test_values, 4, vals);
+    std::copy_n((size_t *)&test_values, 4, vals);
     vect<size_t, 4> vect1a = *reinterpret_cast<vect<size_t, 4> *>(vals);
     vect<size_t, 4> vect1b(vals);
 
@@ -200,11 +201,11 @@ int main() {
     test_mem1.c = test_values[2];
     test_mem1.d = test_values[3];
     vect<size_t, 4> vect2a = *reinterpret_cast<vect<size_t, 4> *>(&test_mem1);
-    vect<size_t, 4> vect2b(reinterpret_cast<size_t*>(&test_mem1));
+    vect<size_t, 4> vect2b(reinterpret_cast<size_t *>(&test_mem1));
 
     /*these don't work*/
-//    vect<size_t, 4> vect3 = reinterpret_cast<vect<size_t, 4>>(test_mem1);
-//    vect<size_t, 4> vect4 = (vect<size_t, 4>)(test_mem1);
+    //    vect<size_t, 4> vect3 = reinterpret_cast<vect<size_t, 4>>(test_mem1);
+    //    vect<size_t, 4> vect4 = (vect<size_t, 4>)(test_mem1);
 
     for (int i = 0; i < 4; i++) {
       test(vals[i] == vect1a[i], "reinterpret cast");
@@ -212,8 +213,6 @@ int main() {
       test(vals[i] == vect2a[i], "reinterpret cast");
       test(vals[i] == vect2b[i], "reinterpret cast");
     }
-
-
   }
 
   return 0;

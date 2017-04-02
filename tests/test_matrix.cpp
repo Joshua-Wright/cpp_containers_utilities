@@ -1,12 +1,14 @@
 // (c) Copyright 2016 Josh Wright
-#include <iostream>
+#include "testing.h"
+#include "util/debug.h"
+#include "util/matrix.h"
 #include <cassert>
 #include <iomanip>
-#include "../lib/matrix.h"
-#include "../lib/debug.h"
+#include <iostream>
+
 
 int main() {
-  using containers::matrix;
+  using util::matrix;
   {
 
     matrix<int> test_matrix(5, 5);
@@ -69,21 +71,21 @@ int main() {
     };
     matrix<int> test_data(4, 5);
     for (size_t i = 0; i < (sizeof(values) / sizeof(values[0])); i++) {
-//            debug_log(i);
+      //            debug_log(i);
       test_data(i) = values[i];
     }
     for (int x = 0; x < 4; x++) {
       for (int y = 0; y < 5; y++) {
         test(test_data(x, y) == 10 * (x + 1) + (y + 1), "ordering");
         /*test debugging code*/
-//                std::cout << "test_data(" << x << "," << y << ") = " <<
-//                std::setw(5) << test_data(x, y) << " need " <<
-//                std::setw(5) << 10 * (x + 1) + (y + 1);
-//                if (test_data(x, y) == 10 * (x + 1) + (y + 1)) {
-//                    std::cout << " pass" << std::endl;
-//                } else {
-//                    std::cout << " fail" << std::endl;
-//                }
+        //                std::cout << "test_data(" << x << "," << y << ") = " <<
+        //                std::setw(5) << test_data(x, y) << " need " <<
+        //                std::setw(5) << 10 * (x + 1) + (y + 1);
+        //                if (test_data(x, y) == 10 * (x + 1) + (y + 1)) {
+        //                    std::cout << " pass" << std::endl;
+        //                } else {
+        //                    std::cout << " fail" << std::endl;
+        //                }
       }
     }
   }
@@ -94,10 +96,10 @@ int main() {
     matrix<int> mat3(3, 3);
     matrix<int> mat4(3, 8);
     for (int i = 0; i < 9; i++) {
-      mat1((size_t) i) = i * i;
-      mat2((size_t) i) = i * i;
-      mat3((size_t) i) = i * i;
-      mat4((size_t) i) = i * i;
+      mat1((size_t)i) = i * i;
+      mat2((size_t)i) = i * i;
+      mat3((size_t)i) = i * i;
+      mat4((size_t)i) = i * i;
     }
     mat3(3) = 0;
     test(mat1 == mat2, "equality");
@@ -127,5 +129,4 @@ int main() {
     std::copy_n(matrix3.data(), matrix3.size(), matrix2_malloc.begin());
     test(matrix2_malloc == matrix3, "external allocator");
   }
-
 }

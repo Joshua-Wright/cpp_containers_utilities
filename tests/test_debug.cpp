@@ -1,6 +1,12 @@
 // (c) Copyright 2016 Josh Wright
 
-#include "../lib/debug.h"
+#include "util/debug.h"
+
+void test(bool value, std::string msg) {
+    if (!value) {
+        std::cerr << msg << std::endl;
+    }
+}
 
 int main() {
     test(true, "This should succeed and not show");
@@ -14,28 +20,29 @@ int main() {
 
     std::string var = "asdf";
     int var2 = 1234;
-    debug_log_notype(var);
-    debug_log_type(var);
-    debug_log(&var);
-    debug_log_notype(var2);
-    debug_log_type(var2);
-    debug_log(&var2);
-    debug_log(var.c_str());
-    debug_log(     5);
-    debug_log(5     );
-    debug_log((float) 123.431243213123123213123123123);
-    debug_log((int) 123.431243213123123213123123123);
-    debug_log(123.431243213123123213123123123);
-    debug_log('a');
-    debug_log('as');
-    debug_log('asd');
-    debug_log('asdf');
-    debug_log("asdf");
-    debug_log(__test);
-    debug_log(&__test);
-    debug_log(basename("test"));
-    debug_log(basename("/test"));
-    debug_log(basename("/path/to/test"));
+    DEBUG_LOG_NOTYPE(var);
+    DEBUG_LOG_TYPE(var);
+    DEBUG_LOG(&var);
+    DEBUG_LOG_NOTYPE(var2);
+    DEBUG_LOG_NOTYPE(var2);
+    DEBUG_LOG(&var2);
+    DEBUG_LOG(var.c_str());
+    DEBUG_LOG(5);
+    DEBUG_LOG(5);
+    DEBUG_LOG((float)123.431243213123123213123123123);
+    DEBUG_LOG((int)123.431243213123123213123123123);
+    DEBUG_LOG(123.431243213123123213123123123);
+    DEBUG_LOG('a');
+    DEBUG_LOG('as');
+    DEBUG_LOG('asd');
+    DEBUG_LOG('asdf');
+    DEBUG_LOG("asdf");
+    DEBUG_LOG(main);
+    DEBUG_LOG(&main);
+    DEBUG_LOG(basename("test"));
+    DEBUG_LOG(basename("/test"));
+    DEBUG_LOG(basename("/path/to/test"));
+    DEBUG_LOG(typeid(5).name());
 
     return 0;
 }
