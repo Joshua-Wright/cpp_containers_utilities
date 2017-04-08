@@ -14,10 +14,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3")
 
 
 add_executable(test_debug tests/test_debug.cpp)
 add_executable(test_matrix tests/test_matrix.cpp)
 add_executable(test_vect tests/test_vect.cpp)
 add_executable(test_arg_parser tests/test_arg_parser.cpp src/arg_parser.cpp)
+add_executable(test_reflected_pod tests/test_reflected_pod.cpp src/ReflectedPOD.cpp)
