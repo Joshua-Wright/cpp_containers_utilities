@@ -4,13 +4,17 @@
 // to make them easier to use
 #pragma once
 
-#include <cstring>
 #include <iomanip>
 #include <iostream>
 #include <malloc.h>
 #include <sstream>
 #include <typeinfo>
 #include <vector>
+
+#ifndef DEBUG_USE_BASENAME
+#include <cstring>
+#define DEBUG_USE_BASENAME 1
+#endif
 
 #ifndef DEMANGLE
 #define DEMANGLE 1
@@ -39,7 +43,13 @@ struct print {
         if (space) {
             cerr << ' ';
         } else {
-            cerr << basename(file) << ":" << line << " " << expr << " = ";
+            cerr <<
+#if DEBUG_USE_BASENAME
+                basename(file)
+#else
+                file
+#endif
+                 << ":" << line << " " << expr << " = ";
             space = true;
         }
         cerr << t;
@@ -67,7 +77,13 @@ std::string demangle_type_name() {
 template <typename T>
 void __debug_log(T v, const char *l, const char *f, int line, bool p) {
     /*debug logger that uses template type resolution to print whatever we give it*/
-    cerr << basename(f) << ":" << line << " ";
+    cerr <<
+#if DEBUG_USE_BASENAME
+        basename(f)
+#else
+        f
+#endif
+         << ":" << line << " ";
     if (p) {
         cerr << demangle_type_name<T>() << " ";
     }
