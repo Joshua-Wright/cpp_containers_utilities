@@ -22,3 +22,6 @@ add_executable(test_matrix tests/test_matrix.cpp)
 add_executable(test_vect tests/test_vect.cpp)
 add_executable(test_arg_parser tests/test_arg_parser.cpp src/arg_parser.cpp)
 add_executable(test_reflected_pod tests/test_reflected_pod.cpp src/ReflectedPOD.cpp)
+add_executable(test_reflect_v2 tests/test_reflect_v2.cpp)
+
+add_executable(tmp src/read_struct.cpp tmp.cpp)
