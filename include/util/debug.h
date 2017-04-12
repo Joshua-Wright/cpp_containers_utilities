@@ -4,6 +4,7 @@
 // to make them easier to use
 #pragma once
 
+#include "preprocessor_utils.h"
 #include <iomanip>
 #include <iostream>
 #include <malloc.h>
@@ -143,8 +144,6 @@ struct key_value_printer {
 #define __KV_0 __hidden__::key_value_printer(__FILE__, __LINE__)
 /* the python source to generate this macro trees is included in long_macros.py */
 
-#define ARG(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31, ...) _31
-#define NARG(...) ARG(__VA_ARGS__, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
 #define __KV_1(a1) \
     __KV_0.a(#a1, a1)
 #define __KV_2(a1, a2) \
@@ -211,10 +210,10 @@ struct key_value_printer {
     __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17).a(#a18, a18).a(#a19, a19).a(#a20, a20).a(#a21, a21).a(#a22, a22).a(#a23, a23).a(#a24, a24).a(#a25, a25).a(#a26, a26).a(#a27, a27).a(#a28, a28).a(#a29, a29).a(#a30, a30).a(#a31, a31).a(#a32, a32)
 
 
-#define ARG_MULTIPLE(N, ...) __KV_##N(__VA_ARGS__)
+#define KV_MULTIPLE(N, ...) __KV_##N(__VA_ARGS__)
 // the following is necessary to make sure the processor has a chance to evaluate NARG16
-#define _ARG_MULTIPLE(N, ...) ARG_MULTIPLE(N, __VA_ARGS__)
-#define KV(...) _ARG_MULTIPLE(NARG(__VA_ARGS__), __VA_ARGS__)
+#define _KV_MULTIPLE(N, ...) KV_MULTIPLE(N, __VA_ARGS__)
+#define KV(...) _KV_MULTIPLE(NARG(__VA_ARGS__), __VA_ARGS__)
 
 
 #define DEBUG_LOG(x) __hidden__::__debug_log(x, #x, __FILE__, __LINE__, __DEBUG_FUNC_NAME, true)
