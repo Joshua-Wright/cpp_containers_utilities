@@ -3,6 +3,7 @@
 
 #include "vect.h"
 #include <algorithm>
+#include <sstream>
 #include <stdexcept>
 #include <type_traits>
 
@@ -149,6 +150,7 @@ public:
     const T *cend() const { // past the end pointer
         return _data + height * width;
     }
+
 
     T &operator()(const std::size_t x, const std::size_t y) {
         if (x >= width || y >= height) {

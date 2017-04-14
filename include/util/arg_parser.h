@@ -13,6 +13,9 @@ namespace util {
 void parse_args(std::unordered_map<std::string, std::stringstream> &config,
                 const int argc, const char **argv);
 
+void parse_args(std::unordered_map<std::string, std::string> &config,
+                const int argc, const char **argv);
+
 class arg_parser {
     std::unordered_map<std::string, std::string> config;
 
