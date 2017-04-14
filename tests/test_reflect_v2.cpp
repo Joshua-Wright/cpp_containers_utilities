@@ -10,6 +10,7 @@ struct C {
   int i;
   float f;
   std::string s;
+  int defaulted;
 };
 
 ADAPT_FIELDS(C, i, f, s)
@@ -26,4 +27,7 @@ int main() {
   test(c.f == 123.875, "read float");
   test(c.s == "asdf", "read string");
   test(std::string(get_struct_name(c)) == "C", "name of type");
+  c.defaulted = 5;
+  c = read(values, c);
+  test(c.defaulted == 5, "don't clobber non-existing values");
 }

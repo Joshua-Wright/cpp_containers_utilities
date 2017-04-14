@@ -19,22 +19,24 @@ typename struct_element<idx, T>::type &get(T &);
 
 template <size_t I, typename T, typename Map>
 void read_field(T &t, Map &m) {
-  std::stringstream ss(m[getname<I>(t)]);
-  ss >> get<I>(t);
+  auto it = m.find(getname<I>(t));
+  if (it != m.end()) {
+    std::stringstream ss(m[getname<I>(t)]);
+    ss >> get<I>(t);
+  }
 }
 
 template <typename T, size_t I = struct_element_count<T>().count() - 1, typename Map>
 typename std::enable_if<(sizeof(T), I == 0), T>::type
-read(Map &m) {
-  T t;
+read(Map &m, T t = T()) {
   read_field<I>(t, m);
   return t;
 }
 
 template <typename T, size_t I = struct_element_count<T>().count() - 1, typename Map>
 typename std::enable_if<(sizeof(T), I != 0), T>::type
-read(Map &m) {
-  T t = read<T, I - 1, Map>(m);
+read(Map &m, T t = T()) {
+  t = read<T, I - 1, Map>(m, t);
   read_field<I>(t, m);
   return t;
 }
