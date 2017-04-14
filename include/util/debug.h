@@ -17,6 +17,12 @@
 #define DEBUG_USE_BASENAME 1
 #endif
 
+#ifdef __GNUC__
+#define __DEBUG_FUNC_NAME __PRETTY_FUNCTION__
+#else
+#define __DEBUG_FUNC_NAME __func__
+#endif
+
 #ifndef DEMANGLE
 #define DEMANGLE 1
 #include <cxxabi.h> // for abi::__cxa_demangle()
@@ -50,7 +56,7 @@ struct print {
 #else
                 file
 #endif
-                 << ":" << line << " " << expr << " = ";
+                 << ":" << line << expr << " = ";
             space = true;
         }
         cerr << t;
@@ -76,7 +82,7 @@ std::string demangle_type_name() {
 }
 
 template <typename T>
-void __debug_log(T v, const char *l, const char *f, int line, bool p) {
+void __debug_log(T v, const char *l, const char *f, int line, const char *func, bool p) {
     /*debug logger that uses template type resolution to print whatever we give it*/
     cerr <<
 #if DEBUG_USE_BASENAME
@@ -84,7 +90,7 @@ void __debug_log(T v, const char *l, const char *f, int line, bool p) {
 #else
         f
 #endif
-         << ":" << line << " ";
+         << ":" << line << " in " << func << " ";
     if (p) {
         cerr << demangle_type_name<T>() << " ";
     }
@@ -144,8 +150,8 @@ struct key_value_printer {
 #define KV(...) _KV_MULTIPLE(NARG(__VA_ARGS__), __VA_ARGS__)
 
 
-#define DEBUG_LOG(x) __hidden__::__debug_log(x, #x, __FILE__, __LINE__, true)
-#define DEBUG_LOG_TYPE(x) __hidden__::__debug_log(x, #x, __FILE__, __LINE__, true)
-#define DEBUG_LOG_NOTYPE(x) __hidden__::__debug_log(x, #x, __FILE__, __LINE__, false)
+#define DEBUG_LOG(x) __hidden__::__debug_log(x, #x, __FILE__, __LINE__, __DEBUG_FUNC_NAME, true)
+#define DEBUG_LOG_TYPE(x) __hidden__::__debug_log(x, #x, __FILE__, __LINE__, __DEBUG_FUNC_NAME, true)
+#define DEBUG_LOG_NOTYPE(x) __hidden__::__debug_log(x, #x, __FILE__, __LINE__, __DEBUG_FUNC_NAME, false)
 
 #define DEBUG_PRINT(...) __hidden__::print(__FILE__, __LINE__, (#__VA_ARGS__)), __VA_ARGS__;
