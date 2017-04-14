@@ -136,73 +136,7 @@ struct key_value_printer {
 }
 
 #define __KV_0 __hidden__::key_value_printer(__FILE__, __LINE__)
-/* the python source to generate this macro trees is included in long_macros.py */
-
-#define __KV_1(a1) \
-    __KV_0.a(#a1, a1)
-#define __KV_2(a1, a2) \
-    __KV_0.a(#a1, a1).a(#a2, a2)
-#define __KV_3(a1, a2, a3) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3)
-#define __KV_4(a1, a2, a3, a4) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4)
-#define __KV_5(a1, a2, a3, a4, a5) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5)
-#define __KV_6(a1, a2, a3, a4, a5, a6) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6)
-#define __KV_7(a1, a2, a3, a4, a5, a6, a7) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7)
-#define __KV_8(a1, a2, a3, a4, a5, a6, a7, a8) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8)
-#define __KV_9(a1, a2, a3, a4, a5, a6, a7, a8, a9) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9)
-#define __KV_10(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10)
-#define __KV_11(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11)
-#define __KV_12(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12)
-#define __KV_13(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13)
-#define __KV_14(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14)
-#define __KV_15(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15)
-#define __KV_16(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16)
-#define __KV_17(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17)
-#define __KV_18(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17).a(#a18, a18)
-#define __KV_19(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17).a(#a18, a18).a(#a19, a19)
-#define __KV_20(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17).a(#a18, a18).a(#a19, a19).a(#a20, a20)
-#define __KV_21(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17).a(#a18, a18).a(#a19, a19).a(#a20, a20).a(#a21, a21)
-#define __KV_22(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17).a(#a18, a18).a(#a19, a19).a(#a20, a20).a(#a21, a21).a(#a22, a22)
-#define __KV_23(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17).a(#a18, a18).a(#a19, a19).a(#a20, a20).a(#a21, a21).a(#a22, a22).a(#a23, a23)
-#define __KV_24(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17).a(#a18, a18).a(#a19, a19).a(#a20, a20).a(#a21, a21).a(#a22, a22).a(#a23, a23).a(#a24, a24)
-#define __KV_25(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17).a(#a18, a18).a(#a19, a19).a(#a20, a20).a(#a21, a21).a(#a22, a22).a(#a23, a23).a(#a24, a24).a(#a25, a25)
-#define __KV_26(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17).a(#a18, a18).a(#a19, a19).a(#a20, a20).a(#a21, a21).a(#a22, a22).a(#a23, a23).a(#a24, a24).a(#a25, a25).a(#a26, a26)
-#define __KV_27(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17).a(#a18, a18).a(#a19, a19).a(#a20, a20).a(#a21, a21).a(#a22, a22).a(#a23, a23).a(#a24, a24).a(#a25, a25).a(#a26, a26).a(#a27, a27)
-#define __KV_28(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17).a(#a18, a18).a(#a19, a19).a(#a20, a20).a(#a21, a21).a(#a22, a22).a(#a23, a23).a(#a24, a24).a(#a25, a25).a(#a26, a26).a(#a27, a27).a(#a28, a28)
-#define __KV_29(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17).a(#a18, a18).a(#a19, a19).a(#a20, a20).a(#a21, a21).a(#a22, a22).a(#a23, a23).a(#a24, a24).a(#a25, a25).a(#a26, a26).a(#a27, a27).a(#a28, a28).a(#a29, a29)
-#define __KV_30(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17).a(#a18, a18).a(#a19, a19).a(#a20, a20).a(#a21, a21).a(#a22, a22).a(#a23, a23).a(#a24, a24).a(#a25, a25).a(#a26, a26).a(#a27, a27).a(#a28, a28).a(#a29, a29).a(#a30, a30)
-#define __KV_31(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30, a31) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17).a(#a18, a18).a(#a19, a19).a(#a20, a20).a(#a21, a21).a(#a22, a22).a(#a23, a23).a(#a24, a24).a(#a25, a25).a(#a26, a26).a(#a27, a27).a(#a28, a28).a(#a29, a29).a(#a30, a30).a(#a31, a31)
-#define __KV_32(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30, a31, a32) \
-    __KV_0.a(#a1, a1).a(#a2, a2).a(#a3, a3).a(#a4, a4).a(#a5, a5).a(#a6, a6).a(#a7, a7).a(#a8, a8).a(#a9, a9).a(#a10, a10).a(#a11, a11).a(#a12, a12).a(#a13, a13).a(#a14, a14).a(#a15, a15).a(#a16, a16).a(#a17, a17).a(#a18, a18).a(#a19, a19).a(#a20, a20).a(#a21, a21).a(#a22, a22).a(#a23, a23).a(#a24, a24).a(#a25, a25).a(#a26, a26).a(#a27, a27).a(#a28, a28).a(#a29, a29).a(#a30, a30).a(#a31, a31).a(#a32, a32)
-
+#include "__generated/debug.h"
 
 #define KV_MULTIPLE(N, ...) __KV_##N(__VA_ARGS__)
 // the following is necessary to make sure the processor has a chance to evaluate NARG16
