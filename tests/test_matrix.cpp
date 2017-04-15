@@ -1,16 +1,14 @@
 // (c) Copyright 2016 Josh Wright
-#include "testing.h"
-#include "util/debug.h"
-#include "util/matrix.h"
 #include <cassert>
 #include <iomanip>
 #include <iostream>
-
+#include "testing.h"
+#include "util/debug.h"
+#include "util/matrix.h"
 
 int main() {
   using util::matrix;
   {
-
     matrix<int> test_matrix(5, 5);
     test_matrix(1) = 7;
     test_matrix(20) = 18;
@@ -78,7 +76,8 @@ int main() {
       for (int y = 0; y < 5; y++) {
         test(test_data(x, y) == 10 * (x + 1) + (y + 1), "ordering");
         /*test debugging code*/
-        //                std::cout << "test_data(" << x << "," << y << ") = " <<
+        //                std::cout << "test_data(" << x << "," << y << ") = "
+        //                <<
         //                std::setw(5) << test_data(x, y) << " need " <<
         //                std::setw(5) << 10 * (x + 1) + (y + 1);
         //                if (test_data(x, y) == 10 * (x + 1) + (y + 1)) {
@@ -118,7 +117,6 @@ int main() {
     matrix2_malloc.fill(1);
     matrix3.fill(3);
 
-
     matrix1_malloc = matrix3;
     test(matrix1_malloc == matrix3, "external allocator");
     matrix3 = matrix2_malloc;
@@ -128,5 +126,13 @@ int main() {
     matrix3.fill(~30);
     std::copy_n(matrix3.data(), matrix3.size(), matrix2_malloc.begin());
     test(matrix2_malloc == matrix3, "external allocator");
+  }
+  {
+    matrix<int> mat({
+        {1, 2, 3}, {4, 5, 6}, {7, 8, 9},
+    });
+    test(mat(0, 0) == 1, "first row");
+    test(mat(1, 1) == 5, "second row");
+    test(mat(2, 2) == 9, "third row");
   }
 }
