@@ -30,4 +30,21 @@ int main() {
   c.defaulted = 5;
   c = read(values, c);
   test(c.defaulted == 5, "don't clobber non-existing values");
+
+  // to json
+  json j = c;
+  test(j == c, "to json");
+  test(j["i"] == 123, "to json");
+
+  // from json
+  C c2 = R"(
+  {
+    "i": 432,
+    "f": 123.125,
+    "s": "a string"
+  }
+  )"_json;
+  test(c2.i == 432, "from json");
+  test(c2.f == 123.125, "from json");
+  test(c2.s == "a string", "from json");
 }
