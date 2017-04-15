@@ -1,6 +1,7 @@
 // (c) Copyright 2016 Josh Wright
 #include "util/cubic_interp.h"
 #include <algorithm>
+#include <cmath>
 
 using std::size_t;
 using std::pow;

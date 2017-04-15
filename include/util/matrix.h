@@ -1,11 +1,12 @@
 #ifndef CONTAINERS_MATRIX
 #define CONTAINERS_MATRIX
 
+#include "vect.h"
 #include <algorithm>
 #include <sstream>
 #include <stdexcept>
 #include <type_traits>
-#include "vect.h"
+#include <vector>
 
 namespace util {
 
@@ -23,7 +24,7 @@ class matrix {
   std::size_t width, height;
   T *_data;
 
- public:
+public:
   typedef void *(*func_alloc)(size_t);
 
   typedef void (*func_free)(void *);
@@ -155,27 +156,27 @@ class matrix {
     return _data;
   }
 
-  T *begin() {  // first element
+  T *begin() { // first element
     return _data;
   }
 
-  T *end() {  // past the end pointer
+  T *end() { // past the end pointer
     return _data + height * width;
   }
 
-  const T *begin() const {  // first element
+  const T *begin() const { // first element
     return (T *)_data;
   }
 
-  const T *end() const {  // past the end pointer
+  const T *end() const { // past the end pointer
     return _data + height * width;
   }
 
-  const T *cbegin() const {  // first element
+  const T *cbegin() const { // first element
     return (T *)_data;
   }
 
-  const T *cend() const {  // past the end pointer
+  const T *cend() const { // past the end pointer
     return _data + height * width;
   }
 
