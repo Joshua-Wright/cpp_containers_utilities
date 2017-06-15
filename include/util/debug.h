@@ -1,4 +1,4 @@
-// (c) Copyright 2016 Josh Wright
+// (c) Copyright 2016-2017 Josh Wright
 // helpful snippets for debugging C++ programs
 // These abuse macros, templates and operator overloads
 // to make them easier to use
@@ -28,7 +28,7 @@
 #include <cxxabi.h> // for abi::__cxa_demangle()
 #endif
 
-namespace __hidden__ {
+namespace {
 
 using std::cerr;
 using std::endl;
@@ -141,7 +141,7 @@ struct key_value_printer {
 };
 }
 
-#define __KV_0 __hidden__::key_value_printer(__FILE__, __LINE__)
+#define __KV_0 ::key_value_printer(__FILE__, __LINE__)
 #include "__generated/debug.h"
 
 #define KV_MULTIPLE(N, ...) __KV_##N(__VA_ARGS__)
@@ -150,8 +150,8 @@ struct key_value_printer {
 #define KV(...) _KV_MULTIPLE(NARG(__VA_ARGS__), __VA_ARGS__)
 
 
-#define DEBUG_LOG(x) __hidden__::__debug_log(x, #x, __FILE__, __LINE__, __DEBUG_FUNC_NAME, true)
-#define DEBUG_LOG_TYPE(x) __hidden__::__debug_log(x, #x, __FILE__, __LINE__, __DEBUG_FUNC_NAME, true)
-#define DEBUG_LOG_NOTYPE(x) __hidden__::__debug_log(x, #x, __FILE__, __LINE__, __DEBUG_FUNC_NAME, false)
+#define DEBUG_LOG(x) ::__debug_log(x, #x, __FILE__, __LINE__, __DEBUG_FUNC_NAME, true)
+#define DEBUG_LOG_TYPE(x) ::__debug_log(x, #x, __FILE__, __LINE__, __DEBUG_FUNC_NAME, true)
+#define DEBUG_LOG_NOTYPE(x) ::__debug_log(x, #x, __FILE__, __LINE__, __DEBUG_FUNC_NAME, false)
 
-#define DEBUG_PRINT(...) __hidden__::print(__FILE__, __LINE__, (#__VA_ARGS__)), __VA_ARGS__;
+#define DEBUG_PRINT(...) ::print(__FILE__, __LINE__, (#__VA_ARGS__)), __VA_ARGS__;

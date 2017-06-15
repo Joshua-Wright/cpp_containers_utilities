@@ -1,3 +1,4 @@
+# (c) Copyright 2017 Josh Wright
 cmake_minimum_required(VERSION 3.3)
 project(containers)
 
@@ -8,12 +9,12 @@ project(containers)
 include_directories(include/)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++14")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -ggdb")
 
 add_executable(test_debug          tests/test_debug.cpp)
 add_executable(test_matrix         tests/test_matrix.cpp)

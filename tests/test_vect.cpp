@@ -1,4 +1,4 @@
-// (c) Copyright 2015 Josh Wright
+// (c) Copyright 2015-2017 Josh Wright
 
 #include "testing.h"
 #include "util/debug.h"

@@ -1,5 +1,5 @@
-#ifndef CONTAINERS_MATRIX
-#define CONTAINERS_MATRIX
+// (c) Copyright 2017 Josh Wright
+#pragma once
 
 #include "vect.h"
 #include <algorithm>
@@ -44,7 +44,7 @@ public:
         (*this)(i, j) = m[i][j];
       }
     }
-  };
+  }
 
   matrix(const std::vector<std::vector<T>> &m)
       : width(m.size()),
@@ -135,8 +135,7 @@ public:
     return *this;
   }
 
-  template <typename U>
-  void fill(const U &val) {
+  void fill(const T &val) {
     std::fill(_data, _data + (width * height), val);
   }
 
@@ -235,35 +234,35 @@ public:
     std::transform(begin(), end(), begin(),
                    [&lhs](const T &n) { return n * lhs; });
     return *this;
-  };
+  }
 
   template <typename F>
   matrix<T> &operator/=(const F &lhs) {
     std::transform(begin(), end(), begin(),
                    [&lhs](const T &n) { return n / lhs; });
     return *this;
-  };
+  }
 
   template <typename F>
   matrix<T> &operator+=(const F &lhs) {
     std::transform(begin(), end(), begin(),
                    [&lhs](const T &n) { return n + lhs; });
     return *this;
-  };
+  }
 
   template <typename F>
   matrix<T> &operator-=(const F &lhs) {
     std::transform(begin(), end(), begin(),
                    [&lhs](const T &n) { return n - lhs; });
     return *this;
-  };
+  }
 
   template <typename F>
   matrix<T> &operator%=(const F &lhs) {
     std::transform(begin(), end(), begin(),
                    [&lhs](const T &n) { return n % lhs; });
     return *this;
-  };
+  }
 
   template <typename F>
   matrix<T> &fmod_in_place(const F &rhs) {
@@ -278,7 +277,7 @@ public:
     std::transform(begin(), end(), lhs.begin(), begin(),
                    [](const T &a, const U &b) { return a * b; });
     return *this;
-  };
+  }
 
   template <typename U>
   matrix<T> &operator/=(const matrix<U> &lhs) {
@@ -286,7 +285,7 @@ public:
     std::transform(begin(), end(), lhs.begin(), begin(),
                    [](const T &a, const U &b) { return a / b; });
     return *this;
-  };
+  }
 
   template <typename U>
   matrix<T> &operator+=(const matrix<U> &lhs) {
@@ -294,7 +293,7 @@ public:
     std::transform(begin(), end(), lhs.begin(), begin(),
                    [](const T &a, const U &b) { return a + b; });
     return *this;
-  };
+  }
 
   template <typename U>
   matrix<T> &operator-=(const matrix<U> &lhs) {
@@ -302,7 +301,7 @@ public:
     std::transform(begin(), end(), lhs.begin(), begin(),
                    [](const T &a, const U &b) { return a - b; });
     return *this;
-  };
+  }
 
   template <typename U>
   matrix<T> &operator%=(const matrix<U> &lhs) {
@@ -310,7 +309,7 @@ public:
     std::transform(begin(), end(), lhs.begin(), begin(),
                    [](const T &a, const U &b) { return a % b; });
     return *this;
-  };
+  }
 
   template <typename U>
   bool operator==(const matrix<U> &lhs) {
@@ -329,14 +328,12 @@ public:
 template <typename T, typename U>
 bool dimensions_equal(const matrix<T> &a, const matrix<U> &b) {
   return (a.x() == b.x()) && (a.y() == b.y());
-};
+}
 
 template <typename T, typename U>
 void assert_same_size(const matrix<T> &a, const matrix<U> &b) {
   if (!dimensions_equal(a, b)) {
     throw std::invalid_argument("Dimensions must match!");
   }
-};
 }
-
-#endif /*CONTAINERS_MATRIX*/
+}

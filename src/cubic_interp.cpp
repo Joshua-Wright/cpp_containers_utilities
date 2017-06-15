@@ -24,7 +24,7 @@ double hermite(double x, double x0, double x1, double p0, double p1, double m0, 
 }
 
 cubic_interp::cubic_interp(double ymin, double ymax, std::vector<double> xs, std::vector<double> ys)
-    : ymin(ymin), ymax(ymax), xs(xs), ys(ys) {
+    : xs(xs), ys(ys), ymin(ymin), ymax(ymax) {
     // get slopes
     { /*first element*/
         double dx0 = xs.back() - xs.front();

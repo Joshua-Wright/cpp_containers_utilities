@@ -22,7 +22,7 @@ T parse_args(const int argc, const char **argv, T t = T()) {
   parse_args(config, argc, argv);
   t = read<T>(config, t);
   return t;
-};
+}
 
 class arg_parser {
   std::unordered_map<std::string, std::string> config;

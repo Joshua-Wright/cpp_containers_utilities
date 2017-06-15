@@ -1,3 +1,4 @@
+// (c) Copyright 2017 Josh Wright
 #pragma once
 #include "json.hpp"
 #include "preprocessor_utils.h"
@@ -79,15 +80,15 @@ void from_json(const typename std::enable_if<(sizeof(T), I == 0), json>::type &j
   template <>                                                            \
   inline struct_element<I, const T>::type &get<I, const T>(const T &t) { \
     return t.m;                                                          \
-  };                                                                     \
+  }                                                                      \
   template <>                                                            \
   inline struct_element<I, T>::type &get<I, T>(T & t) {                  \
     return t.m;                                                          \
-  };                                                                     \
+  }                                                                      \
   template <>                                                            \
   inline const char *getname<I, T>(const T &) {                          \
     return #m;                                                           \
-  };
+  }
 
 #define DEFINE_COUNT(T, I)                         \
   template <>                                      \
@@ -99,7 +100,7 @@ void from_json(const typename std::enable_if<(sizeof(T), I == 0), json>::type &j
   template <>                                        \
   inline const char *get_struct_name<T>(const T &) { \
     return #T;                                       \
-  };
+  }
 
 #define ADAPT_FIELDS(T, ...)         \
   DEFINE_COUNT(T, NARG(__VA_ARGS__)) \

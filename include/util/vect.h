@@ -1,9 +1,5 @@
-//
-// Created by j0sh on 4/5/16.
-//
-
-#ifndef UTIL_VECT_H
-#define UTIL_VECT_H
+// (c) Copyright 2016-2017 Josh Wright
+#pragma once
 
 #include <algorithm>
 #include <array>
@@ -39,8 +35,7 @@ public:
 
     vect(const T &val) : array() { std::fill(begin(), end(), val); }
 
-    template <typename U>
-    vect(const vect<U, dim> &rhs) {
+    vect(const vect<T, dim> &rhs) {
         std::copy(rhs.begin(), rhs.end(), begin());
     }
 
@@ -61,31 +56,31 @@ public:
         std::transform(begin(), end(), begin(),
                        [&rhs](const T &a) { return a + rhs; });
         return *this;
-    };
+    }
 
     vect<T, dim> &operator-=(const T &rhs) {
         std::transform(begin(), end(), begin(),
                        [&rhs](const T &a) { return a - rhs; });
         return *this;
-    };
+    }
 
     vect<T, dim> &operator*=(const T &rhs) {
         std::transform(begin(), end(), begin(),
                        [&rhs](const T &a) { return a * rhs; });
         return *this;
-    };
+    }
 
     vect<T, dim> &operator/=(const T &rhs) {
         std::transform(begin(), end(), begin(),
                        [&rhs](const T &a) { return a / rhs; });
         return *this;
-    };
+    }
 
     vect<T, dim> &operator%=(const T &rhs) {
         std::transform(begin(), end(), begin(),
                        [&rhs](const T &a) { return a % rhs; });
         return *this;
-    };
+    }
 
     /*vectors*/
     vect<T, dim> operator+=(const vect<T, dim> &rhs) {
@@ -159,13 +154,13 @@ public:
         std::transform(begin(), end(), out.begin(),
                        [&rhs](const T &a) { return std::pow(a, rhs); });
         return out;
-    };
+    }
 
     T norm2() const {
         return std::accumulate(begin(), end(), T(), [](const T &cur, const T &b) {
             return cur + b * b;
         });
-    };
+    }
 
     T norm() const { return std::sqrt(norm2()); }
 
@@ -179,7 +174,7 @@ public:
 
     T avg() const {
         return sum() / dim;
-    };
+    }
 
     T dist2(const vect<T, dim> &rhs) const { return (rhs - *this).norm2(); }
 
@@ -187,9 +182,11 @@ public:
 
     template <typename U>
     operator vect<U, dim>() const {
-        vect<U, dim> out = *this;
+        vect<U, dim> out;
+        std::transform(begin(), end(), out.begin(),
+                       [](const T &t) { return (U) t; });
         return out;
-    };
+    }
 };
 
 template <typename T, size_t dim>
@@ -264,7 +261,7 @@ vect<T, 3> crossP(const vect<T, 3> &u, const vect<T, 3> &v) {
     out[1] = u[2] * v[0] - u[0] * v[2];
     out[2] = u[0] * v[1] - u[1] * v[0];
     return out;
-};
+}
 
 template <typename T>
 vect<T, 3> crossP(const vect<T, 2> &u, const vect<T, 2> &v) {
@@ -273,8 +270,5 @@ vect<T, 3> crossP(const vect<T, 2> &u, const vect<T, 2> &v) {
     out[1] = 0;
     out[2] = u[0] * v[1] - u[1] * v[0];
     return out;
-};
 }
-
-
-#endif //UTIL_VECT_H
+}
