@@ -1,4 +1,158 @@
+// (c) Copyright 2016-2017 Josh Wright
+// helpful snippets for debugging C++ programs
+// These abuse macros, templates and operator overloads
+// to make them easier to use
 #pragma once
+
+#include <iomanip>
+#include <iostream>
+#include <malloc.h>
+#include <sstream>
+#include <typeinfo>
+#include <vector>
+
+#ifndef DEBUG_USE_BASENAME
+#include <cstring>
+#define DEBUG_USE_BASENAME 1
+#endif
+
+#ifdef __GNUC__
+#define DEBUG_FUNC_NAME __PRETTY_FUNCTION__
+#else
+#define DEBUG_FUNC_NAME __func__
+#endif
+
+#ifndef DEBUG_DEMANGLE
+#define DEBUG_DEMANGLE 1
+#include <cxxabi.h> // for abi::__cxa_demangle()
+#endif
+
+namespace {
+
+struct print {
+    bool space;
+    const char *expr;
+    const char *file;
+    int line;
+
+    print(const char *file, int line, const char *expr) : space(false), expr(expr), file(file), line(line) {}
+
+    ~print() { std::cerr << std::endl; }
+
+    template <typename T>
+    print &operator,(const T &t) {
+        if (space) {
+            std::cerr << ' ';
+        } else {
+            std::cerr <<
+#if DEBUG_USE_BASENAME
+                basename(file)
+#else
+                file
+#endif
+                      << ":" << line << expr << " = ";
+            space = true;
+        }
+        std::cerr << t;
+        return *this;
+    }
+};
+
+template <typename T>
+std::string demangle_type_name() {
+    if (typeid(T) == typeid(std::string)) {
+        return "std::string";
+    } else {
+#if DEBUG_DEMANGLE
+        /*gcc-specific way to de-mangle the type names, probably not portable*/
+        char *n = abi::__cxa_demangle(typeid(T).name(), NULL, NULL, NULL);
+#else
+        char *n = typeid(T).name();
+#endif
+        std::string name(n);
+        free(n);
+        return name;
+    }
+}
+
+template <typename T>
+void __debug_log(T v, const char *l, const char *f, int line, const char *func, bool p) {
+    /*debug logger that uses template type resolution to print whatever we give it*/
+    std::cerr <<
+#if DEBUG_USE_BASENAME
+        basename(f)
+#else
+        f
+#endif
+              << ":" << line << " in " << func << " ";
+    if (p) {
+        std::cerr << demangle_type_name<T>() << " ";
+    }
+    std::cerr << l << "=" << v << std::endl;
+}
+
+struct key_value_printer {
+    struct line {
+        std::string type;
+        std::string key;
+        std::string value;
+    };
+    std::vector<line> lines;
+    const char *expr;
+    const char *file;
+    int line;
+
+    key_value_printer(const char *file, int line) : file(file), line(line) {}
+
+    template <typename T>
+    key_value_printer &a(const std::string &key, const T &value) {
+        std::stringstream val;
+        val << value;
+        lines.push_back({demangle_type_name<T>(), key, val.str()});
+        return *this;
+    }
+
+    ~key_value_printer() {
+        size_t max_name_length = 0;
+        size_t max_type_length = 0;
+        for (auto &l : lines) {
+            if (l.key.length() > max_name_length) {
+                max_name_length = (int)l.key.length();
+            }
+            if (l.type.length() > max_type_length) {
+                max_type_length = (int)l.type.length();
+            }
+        }
+        std::cerr << basename(file) << ":" << line << ":" << std::endl;
+        for (auto &l : lines) {
+            std::cerr << std::setw((int)max_type_length) << std::left << l.type
+                      << " : "
+                      << std::setw((int)max_name_length) << std::left << l.key
+                      << " = "
+                      << l.value << std::endl;
+        }
+    }
+};
+}
+
+#define __KV_0 ::key_value_printer(__FILE__, __LINE__)
+
+#define KV_MULTIPLE(N, ...) __KV_##N(__VA_ARGS__)
+// the following is necessary to make sure the processor has a chance to evaluate DEBUG_NARG16
+#define _KV_MULTIPLE(N, ...) KV_MULTIPLE(N, __VA_ARGS__)
+#define KV(...) _KV_MULTIPLE(DEBUG_NARG(__VA_ARGS__), __VA_ARGS__)
+
+
+#define DEBUG_LOG(x) ::__debug_log(x, #x, __FILE__, __LINE__, DEBUG_FUNC_NAME, true)
+#define DEBUG_LOG_TYPE(x) ::__debug_log(x, #x, __FILE__, __LINE__, DEBUG_FUNC_NAME, true)
+#define DEBUG_LOG_NOTYPE(x) ::__debug_log(x, #x, __FILE__, __LINE__, DEBUG_FUNC_NAME, false)
+
+#define DEBUG_PRINT(...) ::print(__FILE__, __LINE__, (#__VA_ARGS__)), __VA_ARGS__;
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// generated
+
 #ifndef DEBUG_ARG
 #define DEBUG_ARG(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31, _32, _33, _34, _35, _36, _37, _38, _39, _40, _41, _42, _43, _44, _45, _46, _47, _48, _49, _50, _51, _52, _53, _54, _55, _56, _57, _58, _59, _60, _61, _62, _63, _64, _65, _66, _67, _68, _69, _70, _71, _72, _73, _74, _75, _76, _77, _78, _79, _80, _81, _82, _83, _84, _85, _86, _87, _88, _89, _90, _91, _92, _93, _94, _95, _96, _97, _98, _99, _100, _101, _102, _103, _104, _105, _106, _107, _108, _109, _110, _111, _112, _113, _114, _115, _116, _117, _118, _119, ...) _119
 #endif

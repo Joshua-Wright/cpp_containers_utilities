@@ -4,7 +4,7 @@
 // to make them easier to use
 #pragma once
 
-#include "preprocessor_utils.h"
+#include "__generated/debug.h"
 #include <iomanip>
 #include <iostream>
 #include <malloc.h>
@@ -18,22 +18,17 @@
 #endif
 
 #ifdef __GNUC__
-#define __DEBUG_FUNC_NAME __PRETTY_FUNCTION__
+#define DEBUG_FUNC_NAME __PRETTY_FUNCTION__
 #else
-#define __DEBUG_FUNC_NAME __func__
+#define DEBUG_FUNC_NAME __func__
 #endif
 
-#ifndef DEMANGLE
-#define DEMANGLE 1
+#ifndef DEBUG_DEMANGLE
+#define DEBUG_DEMANGLE 1
 #include <cxxabi.h> // for abi::__cxa_demangle()
 #endif
 
 namespace {
-
-using std::cerr;
-using std::endl;
-using std::setw;
-using std::left;
 
 struct print {
     bool space;
@@ -43,23 +38,23 @@ struct print {
 
     print(const char *file, int line, const char *expr) : space(false), expr(expr), file(file), line(line) {}
 
-    ~print() { cerr << endl; }
+    ~print() { std::cerr << std::endl; }
 
     template <typename T>
     print &operator,(const T &t) {
         if (space) {
-            cerr << ' ';
+            std::cerr << ' ';
         } else {
-            cerr <<
+            std::cerr <<
 #if DEBUG_USE_BASENAME
                 basename(file)
 #else
                 file
 #endif
-                 << ":" << line << expr << " = ";
+                      << ":" << line << expr << " = ";
             space = true;
         }
-        cerr << t;
+        std::cerr << t;
         return *this;
     }
 };
@@ -69,7 +64,7 @@ std::string demangle_type_name() {
     if (typeid(T) == typeid(std::string)) {
         return "std::string";
     } else {
-#if DEMANGLE
+#if DEBUG_DEMANGLE
         /*gcc-specific way to de-mangle the type names, probably not portable*/
         char *n = abi::__cxa_demangle(typeid(T).name(), NULL, NULL, NULL);
 #else
@@ -84,17 +79,17 @@ std::string demangle_type_name() {
 template <typename T>
 void __debug_log(T v, const char *l, const char *f, int line, const char *func, bool p) {
     /*debug logger that uses template type resolution to print whatever we give it*/
-    cerr <<
+    std::cerr <<
 #if DEBUG_USE_BASENAME
         basename(f)
 #else
         f
 #endif
-         << ":" << line << " in " << func << " ";
+              << ":" << line << " in " << func << " ";
     if (p) {
-        cerr << demangle_type_name<T>() << " ";
+        std::cerr << demangle_type_name<T>() << " ";
     }
-    cerr << l << "=" << v << endl;
+    std::cerr << l << "=" << v << std::endl;
 }
 
 struct key_value_printer {
@@ -129,29 +124,28 @@ struct key_value_printer {
                 max_type_length = (int)l.type.length();
             }
         }
-        cerr << basename(file) << ":" << line << ":" << endl;
+        std::cerr << basename(file) << ":" << line << ":" << std::endl;
         for (auto &l : lines) {
-            cerr << setw((int)max_type_length) << left << l.type
-                 << " : "
-                 << setw((int)max_name_length) << left << l.key
-                 << " = "
-                 << l.value << endl;
+            std::cerr << std::setw((int)max_type_length) << std::left << l.type
+                      << " : "
+                      << std::setw((int)max_name_length) << std::left << l.key
+                      << " = "
+                      << l.value << std::endl;
         }
     }
 };
 }
 
 #define __KV_0 ::key_value_printer(__FILE__, __LINE__)
-#include "__generated/debug.h"
 
 #define KV_MULTIPLE(N, ...) __KV_##N(__VA_ARGS__)
-// the following is necessary to make sure the processor has a chance to evaluate NARG16
+// the following is necessary to make sure the processor has a chance to evaluate DEBUG_NARG16
 #define _KV_MULTIPLE(N, ...) KV_MULTIPLE(N, __VA_ARGS__)
-#define KV(...) _KV_MULTIPLE(NARG(__VA_ARGS__), __VA_ARGS__)
+#define KV(...) _KV_MULTIPLE(DEBUG_NARG(__VA_ARGS__), __VA_ARGS__)
 
 
-#define DEBUG_LOG(x) ::__debug_log(x, #x, __FILE__, __LINE__, __DEBUG_FUNC_NAME, true)
-#define DEBUG_LOG_TYPE(x) ::__debug_log(x, #x, __FILE__, __LINE__, __DEBUG_FUNC_NAME, true)
-#define DEBUG_LOG_NOTYPE(x) ::__debug_log(x, #x, __FILE__, __LINE__, __DEBUG_FUNC_NAME, false)
+#define DEBUG_LOG(x) ::__debug_log(x, #x, __FILE__, __LINE__, DEBUG_FUNC_NAME, true)
+#define DEBUG_LOG_TYPE(x) ::__debug_log(x, #x, __FILE__, __LINE__, DEBUG_FUNC_NAME, true)
+#define DEBUG_LOG_NOTYPE(x) ::__debug_log(x, #x, __FILE__, __LINE__, DEBUG_FUNC_NAME, false)
 
 #define DEBUG_PRINT(...) ::print(__FILE__, __LINE__, (#__VA_ARGS__)), __VA_ARGS__;
