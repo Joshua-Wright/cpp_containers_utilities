@@ -3,6 +3,7 @@
 
 #include "vect.h"
 #include <algorithm>
+#include <memory>
 #include <sstream>
 #include <stdexcept>
 #include <type_traits>
@@ -10,35 +11,26 @@
 
 namespace util {
 
-template <typename T>
-class matrix;
-
-template <typename T, typename U>
-bool dimensions_equal(const matrix<T> &a, const matrix<U> &b);
-
-template <typename T, typename U>
-void assert_same_size(const matrix<T> &a, const matrix<U> &b);
-
-template <typename T>
+template <typename T, class Alloc = std::allocator<T>>
 class matrix {
   std::size_t width, height;
   T *_data;
+  Alloc a;
+
+  T *allocate(const size_t &n) {
+    // TODO pass _data as hint?
+    return std::allocator_traits<Alloc>::allocate(a, n);
+  }
+
+  void deallocate(T *t, const size_t &n) {
+    std::allocator_traits<Alloc>::deallocate(a, t, n);
+  }
 
 public:
-  typedef void *(*func_alloc)(size_t);
-
-  typedef void (*func_free)(void *);
-
-  func_alloc alloc;
-  func_free dealloc;
-
   template <size_t I, size_t J>
-  matrix(const std::array<std::array<T, J>, I> &m)
-      : width(I),
-        height(J),
-        _data(new T[I * J]),
-        alloc(nullptr),
-        dealloc(nullptr) {
+  matrix(const std::array<std::array<T, J>, I> &m, const Alloc &alloc = Alloc())
+      : width(I), height(J),
+        _data(allocate(I * J)), a(alloc) {
     for (size_t i = 0; i < width; i++) {
       for (size_t j = 0; j < width; j++) {
         (*this)(i, j) = m[i][j];
@@ -46,12 +38,9 @@ public:
     }
   }
 
-  matrix(const std::vector<std::vector<T>> &m)
-      : width(m.size()),
-        height(m[0].size()),
-        _data(new T[width * height]),
-        alloc(nullptr),
-        dealloc(nullptr) {
+  matrix(const std::vector<std::vector<T>> &m, const Alloc &alloc = Alloc())
+      : width(m.size()), height(m[0].size()),
+        _data(allocate(width * height)), a(alloc) {
     // TODO assert all sizes work
     for (size_t i = 0; i < width; i++) {
       for (size_t j = 0; j < width; j++) {
@@ -60,72 +49,57 @@ public:
     }
   };
 
-  matrix()
-      : width(0), height(0), _data(nullptr), alloc(nullptr), dealloc(nullptr){};
+  matrix() : width(0), height(0),
+             _data(nullptr),
+             a(Alloc()){};
 
-  matrix(const std::size_t x, const std::size_t y, const T initial_value = T())
-      : width(x),
-        height(y),
-        _data(new T[width * height]),
-        alloc(nullptr),
-        dealloc(nullptr) {
+  matrix(const std::size_t x, const std::size_t y, const T initial_value = T(),
+         const Alloc &alloc = Alloc())
+      : width(x), height(y),
+        _data(allocate(width * height)),
+        a(alloc) {
     std::fill_n(_data, width * height, initial_value);
   };
 
-  matrix(const std::size_t x, const std::size_t y, func_alloc allocator,
-         func_free deallocator)
-      : width(x), height(y), alloc(allocator), dealloc(deallocator) {
-    _data = (T *)alloc(width * height * sizeof(T));
-    std::fill_n(_data, width * height, T());
-  }
-
-  matrix(const matrix<T> &lhs)
+  matrix(const matrix<T, Alloc> &lhs)
       : width(lhs.width),
         height(lhs.height),
-        alloc(lhs.alloc),
-        dealloc(lhs.dealloc),
-        _data(new T[width * height]) {
+        _data(), a(lhs.a) {
     std::copy_n(lhs._data, width * height, _data);
   }
 
   ~matrix() {
-    if (dealloc == nullptr) {
-      delete[] _data;
-    } else {
-      dealloc(_data);
-    }
+    deallocate(_data, width * height);
   }
 
-  matrix &operator=(const matrix<T> &lhs) {
+  matrix &operator=(const matrix<T, Alloc> &lhs) {
     if (&lhs == this) {
       /*we are being assigned to ourself*/
       return *this;
     }
-    if (dealloc == nullptr) {
-      delete[] _data;
-    } else {
-      dealloc(_data);
-    }
+    a = lhs.a;
+    deallocate(_data, width * height);
     width = lhs.width;
     height = lhs.height;
-    _data = new T[width * height];
+    _data = allocate(width * height);
     std::copy_n(lhs._data, width * height, _data);
     return *this;
   }
 
-  matrix(matrix<T> &&lhs)
-      : width(lhs.width), height(lhs.height), _data(lhs._data) {
+  matrix(matrix<T, Alloc> &&lhs)
+      : width(lhs.width), height(lhs.height), _data(lhs._data), a(lhs.a) {
     lhs._data = nullptr;
     lhs.width = 0;
     lhs.height = 0;
   }
 
-  matrix<T> &operator=(matrix<T> &&lhs) {
+  matrix<T, Alloc> &operator=(matrix<T, Alloc> &&lhs) {
     if (&lhs == this) {
       /*we are being moved to ourself*/
       return *this;
     }
-    delete[] _data;
+    a = lhs.a;
+    deallocate(_data, width * height);
     width = lhs.width;
     height = lhs.height;
     _data = lhs._data;
@@ -139,11 +113,17 @@ public:
     std::fill(_data, _data + (width * height), val);
   }
 
-  std::size_t x() const { return width; }
+  std::size_t x() const {
+    return width;
+  }
 
-  std::size_t y() const { return height; }
+  std::size_t y() const {
+    return height;
+  }
 
-  std::size_t size() const { return width * height; }
+  std::size_t size() const {
+    return width * height;
+  }
 
   T *data() {
     /*simple getter for the underlying array*/
@@ -199,7 +179,9 @@ public:
     return _data[y * width + x];
   }
 
-  T &operator()(const vect<size_t, 2> &p) { return (*this)(p[0], p[1]); }
+  T &operator()(const vect<size_t, 2> &p) {
+    return (*this)(p[0], p[1]);
+  }
 
   const T &operator()(const vect<size_t, 2> &p) const {
     return (*this)(p[0], p[1]);
@@ -225,9 +207,13 @@ public:
     return _data[z];
   }
 
-  std::size_t z_to_x(std::size_t z) { return z / height; };
+  std::size_t z_to_x(std::size_t z) {
+    return z / height;
+  };
 
-  std::size_t z_to_y(std::size_t z) { return z % height; };
+  std::size_t z_to_y(std::size_t z) {
+    return z % height;
+  };
 
   template <typename F>
   matrix<T> &operator*=(const F &lhs) {
@@ -273,7 +259,7 @@ public:
 
   template <typename U>
   matrix<T> &operator*=(const matrix<U> &lhs) {
-    assert_same_size(*this, lhs);
+    assert_same_size(lhs);
     std::transform(begin(), end(), lhs.begin(), begin(),
                    [](const T &a, const U &b) { return a * b; });
     return *this;
@@ -281,7 +267,7 @@ public:
 
   template <typename U>
   matrix<T> &operator/=(const matrix<U> &lhs) {
-    assert_same_size(*this, lhs);
+    assert_same_size(lhs);
     std::transform(begin(), end(), lhs.begin(), begin(),
                    [](const T &a, const U &b) { return a / b; });
     return *this;
@@ -289,7 +275,7 @@ public:
 
   template <typename U>
   matrix<T> &operator+=(const matrix<U> &lhs) {
-    assert_same_size(*this, lhs);
+    assert_same_size(lhs);
     std::transform(begin(), end(), lhs.begin(), begin(),
                    [](const T &a, const U &b) { return a + b; });
     return *this;
@@ -297,7 +283,7 @@ public:
 
   template <typename U>
   matrix<T> &operator-=(const matrix<U> &lhs) {
-    assert_same_size(*this, lhs);
+    assert_same_size(lhs);
     std::transform(begin(), end(), lhs.begin(), begin(),
                    [](const T &a, const U &b) { return a - b; });
     return *this;
@@ -305,35 +291,31 @@ public:
 
   template <typename U>
   matrix<T> &operator%=(const matrix<U> &lhs) {
-    assert_same_size(*this, lhs);
+    assert_same_size(lhs);
     std::transform(begin(), end(), lhs.begin(), begin(),
                    [](const T &a, const U &b) { return a % b; });
     return *this;
   }
 
-  template <typename U>
-  bool operator==(const matrix<U> &lhs) {
-    if (!dimensions_equal(*this, lhs)) {
+  bool operator==(const matrix<T, Alloc> &lhs) {
+    if (!dimensions_equal( lhs)) {
       return false;
     }
     return std::equal(begin(), end(), lhs.begin());
   }
 
-  template <typename U>
-  bool operator!=(const matrix<U> &lhs) {
+  bool operator!=(const matrix<T, Alloc> &lhs) {
     return !((*this) == lhs);
   }
-};
 
-template <typename T, typename U>
-bool dimensions_equal(const matrix<T> &a, const matrix<U> &b) {
-  return (a.x() == b.x()) && (a.y() == b.y());
-}
-
-template <typename T, typename U>
-void assert_same_size(const matrix<T> &a, const matrix<U> &b) {
-  if (!dimensions_equal(a, b)) {
-    throw std::invalid_argument("Dimensions must match!");
+  bool dimensions_equal(const matrix<T, Alloc> &other) {
+    return (x() == other.x()) && (y() == other.y());
   }
-}
+
+  void assert_same_size(const matrix<T, Alloc> &other) {
+    if (!dimensions_equal(other)) {
+      throw std::invalid_argument("Dimensions must match!");
+    }
+  }
+};
 }

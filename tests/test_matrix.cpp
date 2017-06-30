@@ -1,10 +1,26 @@
 // (c) Copyright 2016 Josh Wright
-#include <cassert>
-#include <iomanip>
-#include <iostream>
 #include "testing.h"
 #include "util/debug.h"
 #include "util/matrix.h"
+#include <cassert>
+#include <iomanip>
+#include <iostream>
+#include <cstdlib>
+
+template <class T>
+struct Mallocator {
+  typedef T value_type;
+  Mallocator() = default;
+  template <class U>
+  Mallocator(const Mallocator<U> &) {}
+  T *allocate(std::size_t n) { return static_cast<T *>(std::malloc(n * sizeof(T))); }
+  void deallocate(T *p, std::size_t) { std::free(p); }
+};
+template <class T, class U>
+bool operator==(const Mallocator<T>&, const Mallocator<U>&) { return true; }
+template <class T, class U>
+bool operator!=(const Mallocator<T>&, const Mallocator<U>&) { return false; }
+
 
 int main() {
   using util::matrix;
@@ -109,10 +125,10 @@ int main() {
     test(!(mat1 == mat4), "inequality");
   }
   {
-    /*test other (C-style) allocators*/
-    matrix<int> matrix1_malloc(5, 5, malloc, free);
-    matrix<int> matrix2_malloc(5, 5, malloc, free);
-    matrix<int> matrix3(5, 5);
+    /*test other (C++ style) allocators*/
+    matrix<int, Mallocator<int>> matrix1_malloc(5, 5);
+    matrix<int, Mallocator<int>>matrix2_malloc(5, 5);
+    matrix<int, Mallocator<int>> matrix3(5, 5);
     matrix1_malloc.fill(0);
     matrix2_malloc.fill(1);
     matrix3.fill(3);
