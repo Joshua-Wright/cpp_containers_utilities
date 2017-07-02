@@ -3,6 +3,7 @@
 
 #include "vect.h"
 #include <algorithm>
+#include <cassert>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
@@ -13,20 +14,22 @@ namespace util {
 
 template <typename T, class Alloc = std::allocator<T>>
 class matrix {
+  using ptr_type = typename std::allocator_traits<Alloc>::pointer;
   std::size_t width, height;
-  T *_data;
+  ptr_type _data;
   Alloc a;
 
-  T *allocate(const size_t &n) {
-    // TODO pass _data as hint?
+  ptr_type allocate(const size_t &n) {
     return std::allocator_traits<Alloc>::allocate(a, n);
   }
 
-  void deallocate(T *t, const size_t &n) {
+  void deallocate(ptr_type t, const size_t &n) {
     std::allocator_traits<Alloc>::deallocate(a, t, n);
   }
 
 public:
+  using iterator = ptr_type;
+
   template <size_t I, size_t J>
   matrix(const std::array<std::array<T, J>, I> &m, const Alloc &alloc = Alloc())
       : width(I), height(J),
@@ -41,9 +44,9 @@ public:
   matrix(const std::vector<std::vector<T>> &m, const Alloc &alloc = Alloc())
       : width(m.size()), height(m[0].size()),
         _data(allocate(width * height)), a(alloc) {
-    // TODO assert all sizes work
     for (size_t i = 0; i < width; i++) {
-      for (size_t j = 0; j < width; j++) {
+      assert(m[i].size() == height);
+      for (size_t j = 0; j < height; j++) {
         (*this)(i, j) = m[i][j];
       }
     }
@@ -125,57 +128,47 @@ public:
     return width * height;
   }
 
-  T *data() {
+  ptr_type data() {
     /*simple getter for the underlying array*/
     return _data;
   }
 
-  const T *data() const {
+  const ptr_type data() const {
     /*simple getter for the underlying array*/
     return _data;
   }
 
-  T *begin() { // first element
+  ptr_type begin() { // first element
     return _data;
   }
 
-  T *end() { // past the end pointer
+  ptr_type end() { // past the end pointer
     return _data + height * width;
   }
 
-  const T *begin() const { // first element
-    return (T *)_data;
+  const ptr_type begin() const { // first element
+    return _data;
   }
 
-  const T *end() const { // past the end pointer
+  const ptr_type end() const { // past the end pointer
     return _data + height * width;
   }
 
-  const T *cbegin() const { // first element
-    return (T *)_data;
+  const ptr_type cbegin() const { // first element
+    return _data;
   }
 
-  const T *cend() const { // past the end pointer
+  const ptr_type cend() const { // past the end pointer
     return _data + height * width;
   }
 
   T &operator()(const std::size_t x, const std::size_t y) {
-    if (x >= width || y >= height) {
-      std::stringstream ss;
-      ss << "out of range: " << x << " >= " << width << " || " << y
-         << " >= " << height;
-      throw std::out_of_range(ss.str());
-    }
+    assert(x < width && y < height);
     return _data[y * width + x];
   }
 
   const T &operator()(const std::size_t x, const std::size_t y) const {
-    if (x >= width || y >= height) {
-      std::stringstream ss;
-      ss << "out of range: " << x << " >= " << width << " || " << y
-         << " >= " << height;
-      throw std::out_of_range(ss.str());
-    }
+    assert(x < width && y < height);
     return _data[y * width + x];
   }
 
@@ -188,23 +181,61 @@ public:
   }
 
   T &operator()(std::size_t z) {
-    if (z >= (width * height)) {
-      std::stringstream ss;
-      ss << "out of range: " << z << " >= " << width << "*" << height
-         << "(=" << (width * height) << ")";
-      throw std::out_of_range(ss.str());
-    }
+    assert(z < width * height);
     return _data[z];
   }
 
   const T &operator()(std::size_t z) const {
+    assert(z < width * height);
+    return _data[z];
+  }
+
+  T &at(std::size_t z) {
     if (z >= (width * height)) {
       std::stringstream ss;
       ss << "out of range: " << z << " >= " << width << "*" << height
          << "(=" << (width * height) << ")";
       throw std::out_of_range(ss.str());
     }
-    return _data[z];
+    return (*this)(z);
+  }
+
+  const T &at(std::size_t z) const {
+    if (z >= (width * height)) {
+      std::stringstream ss;
+      ss << "out of range: " << z << " >= " << width << "*" << height
+         << "(=" << (width * height) << ")";
+      throw std::out_of_range(ss.str());
+    }
+    return (*this)(z);
+  }
+
+  const T &at(const std::size_t x, const std::size_t y) const {
+    if (x >= width || y >= height) {
+      std::stringstream ss;
+      ss << "out of range: " << x << " >= " << width << " || " << y
+         << " >= " << height;
+      throw std::out_of_range(ss.str());
+    }
+    return (*this)(x, y);
+  }
+
+  T &at(const std::size_t x, const std::size_t y) {
+    if (x >= width || y >= height) {
+      std::stringstream ss;
+      ss << "out of range: " << x << " >= " << width << " || " << y
+         << " >= " << height;
+      throw std::out_of_range(ss.str());
+    }
+    return (*this)(x, y);
+  }
+
+  T &at(const vect<size_t, 2> &p) {
+    return at(p[0], p[1]);
+  }
+
+  const T &at(const vect<size_t, 2> &p) const {
+    return at(p[0], p[1]);
   }
 
   std::size_t z_to_x(std::size_t z) {
@@ -298,7 +329,7 @@ public:
   }
 
   bool operator==(const matrix<T, Alloc> &lhs) {
-    if (!dimensions_equal( lhs)) {
+    if (!dimensions_equal(lhs)) {
       return false;
     }
     return std::equal(begin(), end(), lhs.begin());
