@@ -7,8 +7,30 @@
 #include <numeric> // for accumulate
 #include <ostream>
 
-namespace util {
+#ifndef VECT_NO_ALIGN
+#define VECT_ALIGN(dim) __attribute__((aligned(upper_power_of_two(dim))))
+#else
+#ifndef VECT_ALIGN
+#define VECT_ALIGN(dim)
+#endif
+#endif
 
+namespace util {
+    
+namespace {
+constexpr size_t upper_power_of_two(size_t v) {
+    v--;
+    v |= v >> 1;
+    v |= v >> 2;
+    v |= v >> 4;
+    v |= v >> 8;
+    v |= v >> 16;
+    v |= v >> 32;
+    v++;
+    return v;
+    
+}
+}
 
 template <typename T, size_t dim>
 struct vect : public std::array<T, dim> {
@@ -187,7 +209,7 @@ public:
                        [](const T &t) { return (U) t; });
         return out;
     }
-};
+} VECT_ALIGN(dim);
 
 template <typename T, size_t dim>
 vect<T, dim> operator+(const vect<T, dim> &lhs, const T &rhs) {
