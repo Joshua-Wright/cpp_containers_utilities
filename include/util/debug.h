@@ -23,7 +23,7 @@
 #define DEBUG_FUNC_NAME __func__
 #endif
 
-#ifndef DEBUG_DEMANGLE
+#if !defined(DEBUG_DEMANGLE) && defined(__cpp_rtti)
 #define DEBUG_DEMANGLE 1
 #include <cxxabi.h> // for abi::__cxa_demangle()
 #endif
@@ -61,6 +61,7 @@ struct print {
 
 template <typename T>
 std::string demangle_type_name() {
+#if defined(__cpp_rtti)
     if (typeid(T) == typeid(std::string)) {
         return "std::string";
     } else {
@@ -74,6 +75,9 @@ std::string demangle_type_name() {
         free(n);
         return name;
     }
+#else
+    return "";
+#endif
 }
 
 template <typename T>
