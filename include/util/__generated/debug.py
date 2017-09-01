@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # (c) Copyright 2017 Josh Wright
+import preprocessor_utils
 max = 120
-
-from preprocessor_utils import print_arg_narg
+preprocessor_utils.max = max
 
 def print_kv_chain():
 	for i in range(1,max+1):
@@ -16,5 +16,5 @@ def print_kv_chain():
 
 if __name__ == '__main__':
 	print("#pragma once")
-	print_arg_narg('DEBUG_')
+	preprocessor_utils.print_arg_narg('DEBUG_')
 	print_kv_chain()

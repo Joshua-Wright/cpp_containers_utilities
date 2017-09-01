@@ -4,6 +4,19 @@
 // to make them easier to use
 #pragma once
 
+#ifdef _MSC_VER
+
+// MSVC does not expand __VA_ARGS__ correctly,
+// so this stuff doesn't work
+#define KV(...)
+#define DEBUG_LOG(x)
+#define DEBUG_LOG_TYPE(x)
+#define DEBUG_LOG_NOTYPE(x)
+#define DEBUG_PRINT(...)
+
+#else
+
+
 #include <iomanip>
 #include <iostream>
 #include <malloc.h>
@@ -11,10 +24,6 @@
 #include <typeinfo>
 #include <vector>
 
-#ifdef _MSC_VER
-#define DEBUG_USE_BASENAME 0
-#define DEBUG_DEMANGLE 0
-#endif
 
 #ifndef DEBUG_USE_BASENAME
 #include <cstring>
@@ -161,6 +170,8 @@ struct key_value_printer {
 #define DEBUG_LOG_NOTYPE(x) ::__debug_log(x, #x, __FILE__, __LINE__, DEBUG_FUNC_NAME, false)
 
 #define DEBUG_PRINT(...) ::print(__FILE__, __LINE__, (#__VA_ARGS__)), __VA_ARGS__;
+
+#endif // ifdef _MSC_VER
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
