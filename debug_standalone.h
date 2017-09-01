@@ -11,6 +11,11 @@
 #include <typeinfo>
 #include <vector>
 
+#ifdef _MSC_VER
+#define DEBUG_USE_BASENAME 0
+#define DEBUG_DEMANGLE 0
+#endif
+
 #ifndef DEBUG_USE_BASENAME
 #include <cstring>
 #define DEBUG_USE_BASENAME 1
@@ -127,7 +132,11 @@ struct key_value_printer {
                 max_type_length = (int)l.type.length();
             }
         }
+#if DEBUG_USE_BASENAME
         std::cerr << basename(file) << ":" << line << ":" << std::endl;
+#else
+        std::cerr << file << ":" << line << ":" << std::endl;
+#endif
         for (auto &l : lines) {
             std::cerr << std::setw((int)max_type_length) << std::left << l.type
                       << " : "
